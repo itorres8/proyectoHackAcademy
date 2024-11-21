@@ -2,7 +2,10 @@ import React from 'react'
 import { Outlet } from 'react-router-dom'
 import NavScrollExample from './Navbar'
 
+
 const Layout = () => {
+
+ 
   return (
     <div>
         <header>

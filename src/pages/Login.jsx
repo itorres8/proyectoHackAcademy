@@ -1,6 +1,19 @@
 import React from 'react'
+/* import { login } from '../Api/movieDb' */
 
 const Login = () => {
+
+/*   try {
+    login({
+      email: "jperez@gmail.com",
+      password: "1234"
+    })
+  
+  } catch (error) {
+    console.log(error)
+  }
+ */
+
   return (
     <div className="raw justify-content-center">
         <div className="col-4 mx-auto mb-3 ">
@@ -11,7 +24,7 @@ const Login = () => {
         <p>Es necesario iniciar sesión con tu cuenta de HackPlus. En caso de no tener una recibirás indicaciones para crearla.</p>
         <form onSubmit="">
           <label htmlFor="email">Correo:</label>
-        <input type="email" placeholder="Correo electrónico" name="email" value="" required/>
+        <input type="email" placeholder="Correo electrónico" name="email" defaultValue="" required/>
         <button type="submit">Continuar</button>
         </form>
         </div>
@@ -21,7 +34,7 @@ const Login = () => {
         <p>Es necesario iniciar sesión con tu cuenta de HackPlus con tu correo electrónico: correo@ejemplo.com</p>
         <form onSubmit="">
           <label htmlFor="password">Contraseña</label>
-        <input type="password" placeholder="Contraseña.." name="password" value="" required/>
+        <input type="password" placeholder="Contraseña.." name="password" defaultValue="" required/>
         <button type="submit">Iniciar sesión</button>
         </form>
       </div>
