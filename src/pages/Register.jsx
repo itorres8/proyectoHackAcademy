@@ -13,10 +13,10 @@ const Register = () => {
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
-    const { name, defaultValue } = e.target;
+    const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: defaultValue,
+      [name]: value,
     }));
   };
 
@@ -38,7 +38,7 @@ const Register = () => {
               type="text"
               placeholder="Nombre.."
               name="firstname"
-              defaultValue={formData.firstname}
+              value={formData.firstname}
               onChange={handleChange}
               required
             />
@@ -47,7 +47,7 @@ const Register = () => {
               type="text"
               placeholder="Apellido.."
               name="lastname"
-              defaultValue={formData.lastname}
+              value={formData.lastname}
               required
             />
             <label htmlFor="address">Dirección</label>
@@ -55,7 +55,7 @@ const Register = () => {
               type="text"
               placeholder="Dirección.."
               name="address"
-              defaultValue={formData.address}
+              value={formData.address}
               required
             />
             <label htmlFor="phone">Teléfono</label>
@@ -63,7 +63,7 @@ const Register = () => {
               type="text"
               placeholder="Teléfono.."
               name="phone"
-              defaultValue={formData.phone}
+              value={formData.phone}
               required
             />
             <label htmlFor="email">Correo</label>
@@ -71,7 +71,7 @@ const Register = () => {
               type="email"
               placeholder="Correo electrónico"
               name="email"
-              defaultValue={formData.email}
+              value={formData.email}
               required
             />
             <label htmlFor="password"> Contraseña</label>
@@ -79,7 +79,7 @@ const Register = () => {
               type="password"
               placeholder="Contraseña.."
               name="password"
-              defaultValue={formData.password}
+              value={formData.password}
               required
             />
             <button type="submit">Continuar</button>
