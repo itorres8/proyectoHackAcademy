@@ -20,6 +20,7 @@ export const register = async (user) => {
 
 export const login = async (dataLogin) => {
   try {
+    console.log(dataLogin);
     const response = await fetch(`${url}/tokens`, {
       method: "POST",
       headers: {
@@ -29,7 +30,9 @@ export const login = async (dataLogin) => {
     });
     const data = await response.json();
     console.log(data);
-  } catch (error) {
-    console.log(error);
+    return data;
+  } catch (err) {
+    console.log(err);
+    return null;
   }
 };
