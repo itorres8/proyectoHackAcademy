@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { register } from "../Api/movieDb";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -23,6 +24,12 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(e);
+    try {
+      const registro = register(formData);
+      console.log(register);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -48,6 +55,7 @@ const Register = () => {
               placeholder="Apellido.."
               name="lastname"
               value={formData.lastname}
+              onChange={handleChange}
               required
             />
             <label htmlFor="address">Dirección</label>
@@ -56,6 +64,7 @@ const Register = () => {
               placeholder="Dirección.."
               name="address"
               value={formData.address}
+              onChange={handleChange}
               required
             />
             <label htmlFor="phone">Teléfono</label>
@@ -64,6 +73,7 @@ const Register = () => {
               placeholder="Teléfono.."
               name="phone"
               value={formData.phone}
+              onChange={handleChange}
               required
             />
             <label htmlFor="email">Correo</label>
@@ -72,6 +82,7 @@ const Register = () => {
               placeholder="Correo electrónico"
               name="email"
               value={formData.email}
+              onChange={handleChange}
               required
             />
             <label htmlFor="password"> Contraseña</label>
@@ -80,6 +91,7 @@ const Register = () => {
               placeholder="Contraseña.."
               name="password"
               value={formData.password}
+              onChange={handleChange}
               required
             />
             <button type="submit">Continuar</button>
