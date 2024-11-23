@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import MovieCard from "../components/MovieCard";
 import { Carousel, Dropdown } from "react-bootstrap";
-import { useSelector, useDispatch } from "react-redux";
 import { fetchMovies, fetchGenres } from "../Api/tmdbAPI";
 
 const Home = () => {
@@ -11,6 +10,7 @@ const Home = () => {
   const [selectedGenre, setSelectedGenre] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const lastMovieElementRef = useRef(null);
 
   useEffect(() => {
     const fetchMoviesAndGenres = async () => {
@@ -90,12 +90,28 @@ const Home = () => {
 
       {}
       <div className="row mt-4">
-        {filteredMovies.map((movie) => (
-          <div className="col-md-4 mb-3" key={movie.id}>
-            <MovieCard movie={movie} />
-          </div>
-        ))}
+        {filteredMovies.map((movie, index) => {
+          if (filteredMovies.length === index + 1) {
+            return (
+              <div
+                key={movie.id}
+                className="col-md-4 mb-3"
+                ref={lastMovieElementRef}
+              >
+                <MovieCard movie={movie} />
+              </div>
+            );
+          } else {
+            return (
+              <div key={movie.id} className="col-md-4 mb-3">
+                <MovieCard movie={movie} />
+              </div>
+            );
+          }
+        })}
       </div>
+
+      {loading && <p>Cargando más películas...</p>}
     </div>
   );
 };
