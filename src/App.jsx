@@ -1,13 +1,13 @@
-import React from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Home from './pages/Home';
-import Movie from './pages/Movie';
-import Cart from './pages/Cart';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import About from './pages/About';
-import Layout from './components/Layout';
-/* import NotFound from './pages/NotFound'; */
+import React from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Home from "./pages/Home";
+import Movie from "./pages/Movie";
+import Cart from "./pages/Cart";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import About from "./pages/About";
+import Layout from "./components/Layout";
+import NotFound from "./pages/NotFound";
 
 const router = createBrowserRouter([
   {
@@ -15,41 +15,39 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       {
-        index:true, 
-        element: <Home />
+        index: true,
+        element: <Home />,
       },
       {
         path: "/movie/:id",
-        element: <Movie />
+        element: <Movie />,
       },
       {
         path: "/cart",
-        element: <Cart />
+        element: <Cart />,
       },
       {
         path: "/login",
-        element: <Login />
+        element: <Login />,
       },
       {
         path: "/register",
-        element: <Register />
+        element: <Register />,
       },
       {
-        path:"/about",
-        element: <About />
+        path: "/about",
+        element: <About />,
       },
-      /* {
+      {
         path: "*",
-        elemento: <NotFound />
-      } */
-    ]
-  }
+        elemento: <NotFound />,
+      },
+    ],
+  },
 ]);
 
-function App () {
-  return (
-    <RouterProvider router={router} />
-  );
+function App() {
+  return <RouterProvider router={router} />;
 }
 
 export default App;
