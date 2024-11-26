@@ -9,6 +9,7 @@ import About from "./pages/About";
 import Layout from "./components/Layout";
 import NotFound from "./pages/NotFound";
 
+
 const router = createBrowserRouter([
   {
     path: "/",

@@ -33,4 +33,29 @@ const fetchMovieCredits = async (id) => {
   return await response.json();
 };
 
-export { fetchMovies, fetchGenres, fetchMovieDetails, fetchMovieCredits };
+const fetchTopRatedMovies = async () => {
+  const response = await fetch(`${BASE_URL}/movie/top_rated?api_key=${API_KEY}`);
+  if (!response.ok) throw new Error("Error al cargar películas top rated");
+  const data = await response.json();
+  return data.results;
+};
+
+const fetchPopularMovies = async () => {
+  const response = await fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}`);
+  if (!response.ok) throw new Error("Error al cargar películas populares");
+  const data = await response.json();
+  return data.results;
+};
+
+const searchMovies = async (query) => {
+  const response = await fetch(
+    `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`
+  );
+  if (!response.ok) throw new Error("Error al buscar películas");
+  const data = await response.json();
+  return data.results;
+};
+
+export { fetchMovies, fetchGenres, fetchMovieDetails, fetchMovieCredits, fetchTopRatedMovies, fetchPopularMovies, searchMovies };
+
+

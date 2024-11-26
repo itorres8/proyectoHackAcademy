@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const cartItems = useSelector((state) => state.cart.cartItems);
-  console.log(cartItems);
+  console.log("cartItems", cartItems);
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -22,11 +22,10 @@ const Cart = () => {
     }
   };
 
-  const pricePerMovie = 100;
 
   const calculateTotal = () => {
     return cartItems.reduce(
-      (total, movie) => total + pricePerMovie * movie.quantity,
+      (total, movie) => total * movie.quantity,
       0
     );
   };
@@ -52,7 +51,7 @@ const Cart = () => {
                     style={{ width: "50px" }}
                   />
                   <span className="ms-2">{movie.title}</span>
-                  <span className="ms-2">Precio: ${pricePerMovie}</span>
+                  {/* <span className="ms-2">Precio: ${pricePerMovie}</span> */}
                   <span className="ms-2">Cantidad: {movie.quantity}</span>
                 </div>
                 <button

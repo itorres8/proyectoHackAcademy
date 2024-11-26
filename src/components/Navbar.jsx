@@ -5,15 +5,27 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../redux/userSlice";
+
+
 
 function NavScrollExample() {
   const cartItems = useSelector((state) => state.cart.cartItems);
+  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch()
+  console.log(user);
 
+  
+
+  const userLogout = () => {
+    dispatch(logout())
+  }
+  
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container fluid>
-        {}
+        
         <Navbar.Brand as={Link} to="/">
           Hack Plus
         </Navbar.Brand>
@@ -24,7 +36,7 @@ function NavScrollExample() {
             style={{ maxHeight: "100px" }}
             navbarScroll
           >
-            {}
+            
             <Nav.Link as={Link} to="/">
               Inicio
             </Nav.Link>
@@ -41,15 +53,22 @@ function NavScrollExample() {
               </Button>
             </Form>
 
-            {}
-            <NavDropdown title="Perfil" id="navbarScrollingDropdown">
+            
+            { user.token !=="" ?<NavDropdown title="Perfil" id="navbarScrollingDropdown">
               <NavDropdown.Item href="#action3">Suscripción</NavDropdown.Item>
               <NavDropdown.Item href="#action4">Perfil</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action5">Cerrar Sesión</NavDropdown.Item>
+              <NavDropdown.Item onClick={userLogout}>Cerrar Sesión</NavDropdown.Item>
             </NavDropdown>
+            :<Nav.Link
+            as={Link}
+            to="/login"
+            className="d-flex align-items-center"
+          >Iniciar sesión
+          </Nav.Link>
+          }
 
-            {}
+            
             <Nav.Link
               as={Link}
               to="/cart"
