@@ -1,7 +1,9 @@
 import { useEffect, useState, useRef } from "react";
 import MovieCard from "../components/MovieCard";
 import { Carousel, Dropdown } from "react-bootstrap";
-import { fetchMovies, fetchGenres } from "../Api/tmdbAPI";
+import { fetchMovies, fetchGenres, fetchTopRatedMovies, fetchPopularMovies } from "../Api/tmdbAPI";
+import { getUser } from "../Api/movieDb";
+import { useSelector } from "react-redux";
 
 const Home = () => {
   const [movies, setMovies] = useState([]);
@@ -11,25 +13,44 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const lastMovieElementRef = useRef(null);
+  const [topRatedMovies, setTopRatedMovies] = useState([]);
+  const [popularMovies, setPopularMovies] = useState([]);
 
+  const user = useSelector((state) => state.user);
+  
   useEffect(() => {
     const fetchMoviesAndGenres = async () => {
       try {
         const movieData = await fetchMovies();
         const genreData = await fetchGenres();
+        const topRatedData = await fetchTopRatedMovies();
+        const popularData = await fetchPopularMovies();
 
         setMovies(movieData);
         setRandomMovies(movieData.sort(() => 0.5 - Math.random()).slice(0, 5));
+        setTopRatedMovies(topRatedData.slice(0, 10));
+        setPopularMovies(popularData.slice(0, 10));
         setGenres(genreData);
       } catch (err) {
         setError(err.message);
       } finally {
         setLoading(false);
       }
+      
+     
+
     };
 
     fetchMoviesAndGenres();
+
   }, []);
+
+  const obtenerUsuario = async () => {
+    if (user.token !==""){
+      const userFetch = await getUser(user.id, user.token);
+      console.log(userFetch);
+    }
+  }
 
   const handleGenreChange = (genreId) => {
     setSelectedGenre(genreId);
@@ -44,7 +65,7 @@ const Home = () => {
 
   return (
     <div>
-      {}
+      <button onClick={obtenerUsuario}>Click</button>
       <Carousel>
         {randomMovies.map((movie) => (
           <Carousel.Item key={movie.id}>
@@ -61,6 +82,28 @@ const Home = () => {
           </Carousel.Item>
         ))}
       </Carousel>
+
+      <div className="container my-4">
+        <h4>Top Rated Movies</h4>
+        <div className="row">
+          {topRatedMovies.map((movie) => (
+            <div key={movie.id} className="col-md-2 mb-3">
+              <MovieCard movie={movie} />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="container my-4">
+        <h4>Popular Movies</h4>
+        <div className="row">
+          {popularMovies.map((movie) => (
+            <div key={movie.id} className="col-md-2 mb-3">
+              <MovieCard movie={movie} />
+            </div>
+          ))}
+        </div>
+      </div>
 
       {}
       <div className="my-3">

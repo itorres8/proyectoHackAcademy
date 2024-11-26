@@ -1,3 +1,4 @@
+
 const url = "https://ha-videoclub-api-g1.vercel.app";
 
 export const register = async (user) => {
@@ -10,17 +11,17 @@ export const register = async (user) => {
       body: JSON.stringify(user),
     });
 
-    console.log(response);
+    
     const data = await response.json();
-    console.log(data);
+    
   } catch (error) {
-    console.log(error);
+    
   }
 };
 
 export const login = async (dataLogin) => {
   try {
-    console.log(dataLogin);
+    
     const response = await fetch(`${url}/tokens`, {
       method: "POST",
       headers: {
@@ -29,10 +30,30 @@ export const login = async (dataLogin) => {
       body: JSON.stringify(dataLogin),
     });
     const data = await response.json();
-    console.log(data);
+    
     return data;
   } catch (err) {
-    console.log(err);
+    
     return null;
   }
 };
+
+export const getUser = async (id,token) => {
+  try {
+    
+    const response = await fetch(`${url}/users/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        "Authorization": `Bearer ${ token }` 
+      }   
+    });
+    const data = await response.json();
+    console.log(data)
+    return data;
+  } catch (err) {
+    
+    return null;
+  }
+};
+

@@ -1,13 +1,14 @@
 import React from "react";
 import { useState } from "react";
 import { login } from "../Api/movieDb";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setUser, setToken } from "../redux/userSlice";
+import { useNavigate } from "react-router-dom";
+
 
 const Login = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
-  console.log(user);
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -24,12 +25,15 @@ const Login = () => {
     }));
   };
 
-  const handleSubmitLogin = (e) => {
+  const handleSubmitLogin = async (e) => {
     e.preventDefault();
-    console.log(e);
-    const datosLogin = login(formData);
+    
+    const datosLogin = await login(formData);
+    
     if (datosLogin.token) {
-      dispatch(setUser(formData), setToken(datosLogin.token));
+      dispatch(setUser(formData));
+      dispatch(setToken(datosLogin.token));
+      navigate("/");
     } else {
       setErrors(datosLogin.error);
     }
