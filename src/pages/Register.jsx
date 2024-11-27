@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { register } from "../Api/movieDb";
+import { useSelector } from "react-redux";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -12,7 +14,8 @@ const Register = () => {
   });
 
   const [errors, setErrors] = useState({});
-
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.user);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -24,9 +27,12 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(e);
+
     try {
       const registro = register(formData);
-      console.log(register);
+      if (user.user.token) {
+        navigate("/login");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -40,61 +46,115 @@ const Register = () => {
           <h2>Crea una cuenta para continuar</h2>
           <p>Crea una cuenta usando correo@ejemplo.com</p>
           <form onSubmit={handleSubmit}>
-            <label htmlFor="firstname">Nombre</label>
-            <input
-              type="text"
-              placeholder="Nombre.."
-              name="firstname"
-              value={formData.firstname}
-              onChange={handleChange}
-              required
-            />
-            <label htmlFor="lastname">Apellido</label>
-            <input
-              type="text"
-              placeholder="Apellido.."
-              name="lastname"
-              value={formData.lastname}
-              onChange={handleChange}
-              required
-            />
-            <label htmlFor="address">Dirección</label>
-            <input
-              type="text"
-              placeholder="Dirección.."
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              required
-            />
-            <label htmlFor="phone">Teléfono</label>
-            <input
-              type="text"
-              placeholder="Teléfono.."
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-            />
-            <label htmlFor="email">Correo</label>
-            <input
-              type="email"
-              placeholder="Correo electrónico"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-            <label htmlFor="password"> Contraseña</label>
-            <input
-              type="password"
-              placeholder="Contraseña.."
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-            <button type="submit">Continuar</button>
+            <div className="input-group mb-3">
+              <label className="input-group-text" htmlFor="firstname">
+                Nombre
+              </label>
+              <input
+                id="firstname"
+                className="form-control"
+                type="text"
+                placeholder="Nombre.."
+                name="firstname"
+                value={formData.firstname}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="input-group mb-3">
+              <label className="input-group-text" htmlFor="lastname">
+                Apellido
+              </label>
+              <input
+                id="lastname"
+                className="form-control"
+                type="text"
+                placeholder="Apellido.."
+                name="lastname"
+                value={formData.lastname}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="input-group mb-3">
+              <label className="input-group-text" htmlFor="address">
+                Dirección
+              </label>
+              <input
+                id="address"
+                className="form-control"
+                type="text"
+                placeholder="Dirección.."
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="input-group mb-3">
+              <label className="input-group-text" htmlFor="phone">
+                Teléfono
+              </label>
+              <input
+                id="phone"
+                className="form-control"
+                type="text"
+                placeholder="Teléfono.."
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="input-group mb-3">
+              <label className="input-group-text" htmlFor="email">
+                Correo
+              </label>
+              <input
+                id="email"
+                className="form-control"
+                type="email"
+                placeholder="Correo electrónico"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="input-group mb-3">
+              <label className="input-group-text" htmlFor="password">
+                {" "}
+                Contraseña
+              </label>
+              <input
+                id="password"
+                className="form-control"
+                type="password"
+                placeholder="Contraseña.."
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <button
+              className="btn btn-success"
+              type="submit"
+              style={{
+                transition: "all 0.3s ease",
+                padding: "8px 15px",
+                fontWeightP: "500",
+                letterSpacing: "0.5px",
+              }}
+              onKeyPress={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  e.target.click();
+                }
+              }}
+            >
+              Continuar
+            </button>
           </form>
         </div>
       </div>

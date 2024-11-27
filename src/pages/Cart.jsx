@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromCart } from "../redux/cartSlice";
 import { useNavigate } from "react-router-dom";
+import { createOrder } from "../Api/movieDb";
+import { clearCart } from "../redux/cartSlice";
 
 const Cart = () => {
   const cartItems = useSelector((state) => state.cart.cartItems);
@@ -9,25 +11,42 @@ const Cart = () => {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const orders = useState([]);
 
   const handleRemove = (movie) => {
     dispatch(removeFromCart(movie));
   };
 
-  const handleCheckout = () => {
-    if (!user || !user.token) {
+  /*
+const movie = {
+  movie_id: 555,
+  title: "El club de la pelea",
+  qty: 2
+};
+
+  */
+  const handleCheckout = async () => {
+    if (!user.user || !user.user.token) {
       navigate("/login");
     } else {
-      console.log("Finalizando compra...");
+      const arrayMovies = [];
+
+      for (let movie of cartItems) {
+        const movieAuxiliar = {
+          movie_id: movie.id,
+          title: movie.title,
+          qty: movie.quantity,
+        };
+        arrayMovies.push(movieAuxiliar);
+      }
+      const order = await createOrder(arrayMovies, user.user.token);
+      dispatch(clearCart());
+      console.log(order);
     }
   };
 
-
   const calculateTotal = () => {
-    return cartItems.reduce(
-      (total, movie) => total * movie.quantity,
-      0
-    );
+    return cartItems.reduce((total, movie) => total * movie.quantity, 0);
   };
 
   return (

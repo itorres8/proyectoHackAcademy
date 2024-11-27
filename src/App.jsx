@@ -9,46 +9,59 @@ import About from "./pages/About";
 import Layout from "./components/Layout";
 import NotFound from "./pages/NotFound";
 
-
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: <Layout />,
+      children: [
+        {
+          index: true,
+          element: <Home />,
+        },
+        {
+          path: "/movie/:id",
+          element: <Movie />,
+        },
+        {
+          path: "/cart",
+          element: <Cart />,
+        },
+        {
+          path: "/login",
+          element: <Login />,
+        },
+        {
+          path: "/register",
+          element: <Register />,
+        },
+        {
+          path: "/about",
+          element: <About />,
+        },
+        {
+          path: "*",
+          elemento: <NotFound />,
+        },
+      ],
+    },
+  ],
   {
-    path: "/",
-    element: <Layout />,
-    children: [
-      {
-        index: true,
-        element: <Home />,
-      },
-      {
-        path: "/movie/:id",
-        element: <Movie />,
-      },
-      {
-        path: "/cart",
-        element: <Cart />,
-      },
-      {
-        path: "/login",
-        element: <Login />,
-      },
-      {
-        path: "/register",
-        element: <Register />,
-      },
-      {
-        path: "/about",
-        element: <About />,
-      },
-      {
-        path: "*",
-        elemento: <NotFound />,
-      },
-    ],
-  },
-]);
+    future: {
+      v7_relativeSplatPath: true,
+      v7_normalizeFormMethod: true,
+      v7_fetcherPersist: true,
+      v7_partialHydration: true,
+      v7_skipActionErrorRevalidation: true,
+      v7_skipActionErrorRevalidation: true,
+    },
+  }
+);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <RouterProvider router={router} future={{ v7_startTransition: true }} />
+  );
 }
 
 export default App;

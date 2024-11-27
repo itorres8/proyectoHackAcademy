@@ -10,7 +10,7 @@ const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action) => {
       const movie = action.payload;
-      
+
       const existingMovie = state.cartItems.find(
         (item) => item.id === movie.id
       );
@@ -25,8 +25,11 @@ const cartSlice = createSlice({
       const movieId = action.payload.id;
       state.cartItems = state.cartItems.filter((movie) => movie.id !== movieId);
     },
+    clearCart: (state) => {
+      state.cartItems = [];
+    },
   },
 });
 
-export const { addToCart, removeFromCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, clearCart } = cartSlice.actions;
 export default cartSlice.reducer;

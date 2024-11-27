@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { login } from "../Api/movieDb";
 import { useDispatch } from "react-redux";
-import { setUser, setToken } from "../redux/userSlice";
+import { setUser } from "../redux/userSlice";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
@@ -31,8 +31,7 @@ const Login = () => {
     const datosLogin = await login(formData);
 
     if (datosLogin.token) {
-      dispatch(setUser(formData));
-      dispatch(setToken(datosLogin.token));
+      dispatch(setUser(datosLogin));
       navigate("/");
     } else {
       setErrors(datosLogin.error);
@@ -57,6 +56,7 @@ const Login = () => {
                   Correo:
                 </label>
                 <input
+                  id="email"
                   className="form-control"
                   type="email"
                   placeholder="Correo electrónico"
@@ -71,6 +71,7 @@ const Login = () => {
                   Contraseña
                 </label>
                 <input
+                  id="password"
                   className="form-control"
                   type="password"
                   placeholder="Contraseña.."
@@ -85,7 +86,18 @@ const Login = () => {
                 <button
                   className="btn btn-success"
                   type="submit"
-                  style={{ transition: "all 0.3s ease" }}
+                  style={{
+                    transition: "all 0.3s ease",
+                    padding: "8px 15px",
+                    fontWeightP: "500",
+                    letterSpacing: "0.5px",
+                  }}
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      e.target.click();
+                    }
+                  }}
                 >
                   Continuar
                 </button>
