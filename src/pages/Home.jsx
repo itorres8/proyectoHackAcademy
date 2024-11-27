@@ -1,7 +1,12 @@
 import { useEffect, useState, useRef } from "react";
 import MovieCard from "../components/MovieCard";
 import { Carousel, Dropdown } from "react-bootstrap";
-import { fetchMovies, fetchGenres, fetchTopRatedMovies, fetchPopularMovies } from "../Api/tmdbAPI";
+import {
+  fetchMovies,
+  fetchGenres,
+  fetchTopRatedMovies,
+  fetchPopularMovies,
+} from "../Api/tmdbAPI";
 import { getUser } from "../Api/movieDb";
 import { useSelector } from "react-redux";
 
@@ -17,7 +22,7 @@ const Home = () => {
   const [popularMovies, setPopularMovies] = useState([]);
 
   const user = useSelector((state) => state.user);
-  
+
   useEffect(() => {
     const fetchMoviesAndGenres = async () => {
       try {
@@ -36,21 +41,17 @@ const Home = () => {
       } finally {
         setLoading(false);
       }
-      
-     
-
     };
 
     fetchMoviesAndGenres();
-
   }, []);
 
   const obtenerUsuario = async () => {
-    if (user.token !==""){
-      const userFetch = await getUser(user.id, user.token);
+    if (user.token !== "") {
+      const userFetch = await getUser(user.user.userId, user.user.token);
       console.log(userFetch);
     }
-  }
+  };
 
   const handleGenreChange = (genreId) => {
     setSelectedGenre(genreId);

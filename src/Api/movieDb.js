@@ -25,7 +25,7 @@ export const login = async (dataLogin) => {
       body: JSON.stringify(dataLogin),
     });
     const data = await response.json();
-
+    console.log(data);
     return data;
   } catch (err) {
     return null;
@@ -33,8 +33,6 @@ export const login = async (dataLogin) => {
 };
 
 export const getUser = async (id, token) => {
-  console.log(id, "id");
-  console.log(token, "token");
   try {
     const response = await fetch(`${url}/users/${id}`, {
       method: "GET",
@@ -42,6 +40,31 @@ export const getUser = async (id, token) => {
         "Content-type": "application/json",
         Authorization: `Bearer ${token}`,
       },
+    });
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const createOrder = async (movies, token) => {
+  console.log(token, "token");
+  const order = {
+    type: "movie",
+    data: movies,
+  };
+
+  console.log(order);
+  try {
+    const response = await fetch(`${url}/orders`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(order),
     });
     const data = await response.json();
     console.log(data);
