@@ -5,6 +5,7 @@ const userSlice = createSlice({
   initialState: {
     user: {},
     token: "",
+    purchases: [],//Agregue esta propiedad para guardar las compras que el user vaya haciendo
   },
   reducers: {
     setUser(state, action) {
