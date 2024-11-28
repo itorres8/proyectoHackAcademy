@@ -67,7 +67,6 @@ export const createOrder = async (movies, token) => {
       body: JSON.stringify(order),
     });
     const data = await response.json();
-    console.log(data);
     return data;
   } catch (err) {
     return null;
