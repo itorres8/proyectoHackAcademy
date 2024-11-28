@@ -2,34 +2,29 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromCart } from "../redux/cartSlice";
 import { useNavigate } from "react-router-dom";
-import { createOrder } from "../Api/movieDb";
+import { createOrder, getUser } from "../Api/movieDb";
 import { clearCart } from "../redux/cartSlice";
+import { addPurchases } from "../redux/userSlice";
 
 const Cart = () => {
   const cartItems = useSelector((state) => state.cart.cartItems);
-  console.log("cartItems", cartItems);
-  const user = useSelector((state) => state.user);
+  const {userId, token} = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const orders = useState([]);
 
   const handleRemove = (movie) => {
     dispatch(removeFromCart(movie));
   };
 
-  /*
-const movie = {
-  movie_id: 555,
-  title: "El club de la pelea",
-  qty: 2
-};
+  
+  
 
-  */
   const handleCheckout = async () => {
-    if (!user.user || !user.user.token) {
+    if (!userId || !token) {
       navigate("/login");
     } else {
       const arrayMovies = [];
+      
 
       for (let movie of cartItems) {
         const movieAuxiliar = {
@@ -39,9 +34,12 @@ const movie = {
         };
         arrayMovies.push(movieAuxiliar);
       }
-      const order = await createOrder(arrayMovies, user.user.token);
-      dispatch(clearCart());
-      console.log(order);
+      await createOrder(arrayMovies, token);
+      const userFetch = await getUser(userId, token)      
+      dispatch(addPurchases(userFetch));
+      console.log(userFetch)
+      
+      /* dispatch(clearCart()); */
     }
   };
 

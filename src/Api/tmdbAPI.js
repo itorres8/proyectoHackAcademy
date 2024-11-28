@@ -59,3 +59,4 @@ const searchMovies = async (query) => {
 export { fetchMovies, fetchGenres, fetchMovieDetails, fetchMovieCredits, fetchTopRatedMovies, fetchPopularMovies, searchMovies };
 
 
+

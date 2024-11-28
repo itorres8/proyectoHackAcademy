@@ -8,6 +8,7 @@ import Register from "./pages/Register";
 import About from "./pages/About";
 import Layout from "./components/Layout";
 import NotFound from "./pages/NotFound";
+import Profile from "./pages/Profile"; 
 
 const router = createBrowserRouter(
   [
@@ -39,6 +40,10 @@ const router = createBrowserRouter(
           path: "/about",
           element: <About />,
         },
+        {
+          path: "/profile",  
+          element: <Profile />,  
+        },  
         {
           path: "*",
           elemento: <NotFound />,

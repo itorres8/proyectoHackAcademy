@@ -42,7 +42,7 @@ export const getUser = async (id, token) => {
       },
     });
     const data = await response.json();
-    console.log(data);
+    
     return data;
   } catch (err) {
     return null;
@@ -50,13 +50,13 @@ export const getUser = async (id, token) => {
 };
 
 export const createOrder = async (movies, token) => {
-  console.log(token, "token");
+  
   const order = {
     type: "movie",
     data: movies,
   };
 
-  console.log(order);
+  
   try {
     const response = await fetch(`${url}/orders`, {
       method: "POST",
@@ -65,6 +65,32 @@ export const createOrder = async (movies, token) => {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(order),
+    });
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const editUser = async (id, token, formData) => {
+  
+  const userUpdate = {
+    firstname: formData.firstname,
+    lastname: formData.lastname,
+    email: formData.email,
+    password: formData.password,
+  }
+
+  try {
+    const response = await fetch(`${url}/users/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(userUpdate),
     });
     const data = await response.json();
     console.log(data);
