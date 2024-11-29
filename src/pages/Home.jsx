@@ -7,7 +7,6 @@ import {
   fetchTopRatedMovies,
   fetchPopularMovies,
 } from "../Api/tmdbAPI";
-import { getUser } from "../Api/movieDb";
 import { useSelector } from "react-redux";
 
 const Home = () => {
@@ -46,12 +45,6 @@ const Home = () => {
     fetchMoviesAndGenres();
   }, []);
 
-  const obtenerUsuario = async () => {
-    if (user.token !== "") {
-      const userFetch = await getUser(user.user.userId, user.user.token);
-      console.log(userFetch);
-    }
-  };
 
   const handleGenreChange = (genreId) => {
     setSelectedGenre(genreId);
@@ -66,7 +59,7 @@ const Home = () => {
 
   return (
     <div>
-      <button onClick={obtenerUsuario}>Click</button>
+      
       <Carousel>
         {randomMovies.map((movie) => (
           <Carousel.Item key={movie.id}>

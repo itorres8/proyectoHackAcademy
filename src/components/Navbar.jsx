@@ -9,6 +9,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../redux/userSlice";
 import { searchMovies } from "../Api/tmdbAPI";
 import { useState } from "react";
+import { NavLink } from 'react-router-dom';
+
 
 function NavScrollExample() {
   const [searchQuery, setSearchQuery] = useState(""); // Estado para la búsqueda
@@ -98,7 +100,7 @@ function NavScrollExample() {
 
             {userState.token !== "" ? (
               <NavDropdown title="Perfil" id="navbarScrollingDropdown">
-                <NavDropdown.Item href="/profile">Mi Perfil</NavDropdown.Item> 
+                <NavDropdown.Item><NavLink to = "/profile">Mi Perfil</NavLink></NavDropdown.Item> 
                 <NavDropdown.Item href="#action3">Suscripción</NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item onClick={userLogout}>Cerrar Sesión</NavDropdown.Item>

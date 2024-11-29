@@ -3,15 +3,13 @@ import { useSelector} from 'react-redux';
 import { editUser, getUser } from '../Api/movieDb';
 
 
-
 const Profile = () => {
   // Obtener el estado del usuario, token y las compras del estado global de Redux
   const { userId, token, purchases } = useSelector((state) => state.user);
-  console.log(purchases);
-  // Estado local para manejar la edición de datos
   const [editing, setEditing] = useState(false);
   const [user, setUser] = useState(false); //usuario para info inicial
   const [userEdited, setUserEdited] = useState(); //usuario para info inicial
+  const [orders, setOrders] = useState([]);
 
   const [formData, setFormData] = useState({
     firstname: user?.firstname || "",
@@ -19,7 +17,8 @@ const Profile = () => {
     email: user?.email || "",
     address: user?.address || "",
     phone: user?.phone || "",
-    password: user?.password || ""
+    password: user?.password || "",
+    orders: user?.orders || "",
   });
 
   
@@ -33,10 +32,14 @@ const Profile = () => {
             email: userBd?.email || "",
             address: userBd?.address || "",
             phone: userBd?.phone || "",
-            password: userBd?.password || ""
+            password: userBd?.password || "",
+            orders: userBd?.orders || "",
             })
             setUser(userBd);
+          setOrders(userBd.orders)
     } 
+
+  
 
    
   useEffect(() => {
@@ -52,6 +55,8 @@ const Profile = () => {
         password: user?.password,
       });
     }
+
+  
   }, [userEdited]);
 
   // Función para manejar los cambios en el formulario
@@ -71,7 +76,7 @@ const Profile = () => {
     const edited = await editUser(userId, token, formData)
     console.log(edited);
     setFormData(edited);
-    setUser(edited)
+    /* setUser(edited) */
     setUserEdited(edited)
   };
 
@@ -96,7 +101,7 @@ const Profile = () => {
               <p><strong>Teléfono:</strong> {user?.phone}</p>
               <button onClick={() => setEditing(true)} className="btn btn-primary">Editar</button>
             </div>
-          ) : (
+           ) : ( 
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label htmlFor="firstname" className="form-label">Nombre</label>
@@ -164,7 +169,8 @@ const Profile = () => {
                   className="form-control"
                 />
               </div>
-              <button type="submit" className="btn btn-success">Guardar</button>
+              <button type="submit" className="btn btn-success m-2">Guardar</button>
+              <button type="button" onClick={() => {setEditing(false)}} className="btn btn-light">Cancelar</button>
             </form>
           )}
         </div>
@@ -173,15 +179,30 @@ const Profile = () => {
       <div className="card mt-4">
         <div className="card-body">
           <h3>Películas Compradas</h3>
-          <ul>
-            {purchases.length > 0 ? (
-              purchases[1].movies.map((movie, index) => (
-                <li key={index}>{movie.title}</li>
-              ))
-            ) : (
-              <p>No has comprado ninguna película aún.</p>
-            )}
-          </ul>
+
+        
+
+           <ul>                     
+            {orders.map((order, index) => (
+              <div key={index}>
+                <h3>{order.id}</h3>
+                <ul>
+                  {order.movies.map((movie, index) => (
+                    <li key={index}>{ movie.title }</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+
+            {/* {  purchases.length > 0 ? (
+                purchases.map((order, index) => (
+                  <li key={index}>Número de orden - {order.id}</li>
+                    
+                ))
+              ) : (
+                <p>No has comprado ninguna película aún.</p>
+              )} */}
+          </ul> 
         </div>
       </div>
     </div>
@@ -190,4 +211,26 @@ const Profile = () => {
 
 export default Profile;
 
+/* const comments = [
+  { text: 'Great post!', replies: ['Thanks!', 'Awesome!'] },
+  { text: 'Nice article', replies: ['Agreed!', 'Very helpful.'] }
+];
 
+function CommentList() {
+  return (
+    <div>
+      {comments.flatMap(comment => [
+        <p key={comment.text}>{comment.text}</p>,
+        ...comment.replies.map(reply => <p key={reply} style={{ paddingLeft: '20px' }}>{reply}</p>)
+      ])}
+    </div>
+  );
+} */
+/* 
+
+  <div>
+  {purchases.flatMap(order => [
+    <p key={order.id}>Número de orden - {order.id}</p>,
+    ...order.movies.map(movie => <p key={movie.movie_id+order.id} style={{ paddingLeft: '20px' }}>{movie.title}</p>)
+  ])}
+</div> */

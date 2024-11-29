@@ -4,7 +4,7 @@ import { removeFromCart } from "../redux/cartSlice";
 import { useNavigate } from "react-router-dom";
 import { createOrder, getUser } from "../Api/movieDb";
 import { clearCart } from "../redux/cartSlice";
-import { addPurchases } from "../redux/userSlice";
+
 
 const Cart = () => {
   const cartItems = useSelector((state) => state.cart.cartItems);
@@ -15,10 +15,7 @@ const Cart = () => {
   const handleRemove = (movie) => {
     dispatch(removeFromCart(movie));
   };
-
   
-  
-
   const handleCheckout = async () => {
     if (!userId || !token) {
       navigate("/login");
@@ -35,11 +32,9 @@ const Cart = () => {
         arrayMovies.push(movieAuxiliar);
       }
       await createOrder(arrayMovies, token);
-      const userFetch = await getUser(userId, token)      
-      dispatch(addPurchases(userFetch));
-      console.log(userFetch)
-      
-      /* dispatch(clearCart()); */
+      const userFetch = await getUser(userId, token)   
+      const { orders }= userFetch     
+      dispatch(clearCart());
     }
   };
 
