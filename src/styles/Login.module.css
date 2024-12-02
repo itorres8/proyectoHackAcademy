@@ -1,0 +1,144 @@
+.loginContainer {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  font-family: "Arial", sans-serif;
+}
+
+.loginWrapper {
+  width: 100%;
+  max-width: 2000px; /* Increased from 400px to 600px */
+}
+
+.logo {
+  max-width: 250px; /* Slightly larger logo */
+  margin: 0 auto 30px;
+  display: block;
+  filter: brightness(1.2) contrast(1.2);
+}
+
+.loginCard {
+  background-color: #1e1e1e !important;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  border: 1px solid #333;
+  transition: all 0.3s ease;
+  padding: 40px !important; /* More internal padding */
+}
+
+.loginCard:hover {
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+}
+
+.loginTitle {
+  color: #fff;
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 600;
+  font-size: 1.8rem; /* Larger title */
+}
+
+.loginSubtitle {
+  color: #a0a0a0;
+  text-align: center;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.inputField {
+  background-color: #b5b2b2 !important;
+  border: 1px solid #444;
+  color: #e0e0e0 !important;
+  transition: all 0.3s ease;
+  padding: 12px; /* More input padding */
+}
+
+.inputField:focus {
+  background-color: #353535;
+  border-color: #5cb85c;
+  box-shadow: 0 0 10px rgba(92, 184, 92, 0.3);
+}
+
+.submitButton {
+  width: 100%;
+  padding: 12px;
+  background-color: #5cb85c !important;
+  border: none;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.submitButton:hover {
+  background-color: #4cae4c !important;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.errorMessage {
+  color: #ff6b6b;
+  margin-top: 15px;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.divider {
+  border-color: #444;
+  margin: 30px 0;
+}
+
+.registerText {
+  text-align: center;
+  color: #a0a0a0;
+  font-size: 1rem;
+}
+
+.registerLink {
+  color: #5cb85c;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.registerLink:hover {
+  color: #4cae4c;
+  text-decoration: underline;
+}
+
+/* Additional responsive adjustments */
+@media (max-width: 768px) {
+  .loginWrapper {
+    max-width: 90%;
+    padding: 15px;
+  }
+
+  .logo {
+    max-width: 200px;
+  }
+
+  .loginCard {
+    padding: 25px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .loginWrapper {
+    max-width: 100%;
+    padding: 10px;
+  }
+
+  .logo {
+    max-width: 150px;
+  }
+
+  .loginCard {
+    padding: 20px !important;
+  }
+
+  .loginTitle {
+    font-size: 1.5rem;
+  }
+}

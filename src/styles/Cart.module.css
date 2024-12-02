@@ -1,0 +1,176 @@
+.cartContainer {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  padding: 2rem;
+  font-family: "Inter", sans-serif;
+}
+
+.cartTitle {
+  color: #5a5a5a;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+  text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  letter-spacing: 1px;
+}
+
+.emptyMessage {
+  color: #7b7b7b;
+  text-align: center;
+  font-size: 1.2rem;
+  margin-top: 2rem;
+}
+
+.cartContent {
+  background-color: #1e1e1e;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.cartList {
+  list-style-type: none;
+  padding: 0;
+}
+
+.cartItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #2c2c2c;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 8px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cartItem:hover {
+  transform: scale(1.02);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.cartItemDetails {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.moviePoster {
+  width: 80px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.movieTitle {
+  color: #ffffff;
+  font-weight: 600;
+  flex-grow: 1;
+}
+
+.movieQuantity {
+  color: #7b7b7b;
+  margin-left: 1rem;
+}
+
+.removeButton {
+  background-color: #e94560;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.removeButton:hover {
+  background-color: #ff1e56;
+  transform: scale(1.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.totalSection {
+  background-color: #2c2c2c;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.totalSection h4 {
+  color: #ffffff;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.checkoutButton {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.checkoutButton:hover {
+  background-color: #45a049;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+}
+
+.checkoutButton:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .cartContainer {
+    padding: 1rem;
+  }
+
+  .cartItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .removeButton {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .totalSection {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+}
+
+/* Subtle Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cartContent {
+  animation: fadeIn 0.5s ease forwards;
+}

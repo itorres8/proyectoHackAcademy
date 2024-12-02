@@ -1,0 +1,250 @@
+.movieContainer {
+  padding: 40px;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.movieContainer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at 20% 50%,
+    rgba(255, 111, 97, 0.1) 0%,
+    transparent 50%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Contenedor principal de la película */
+.movieRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+  align-items: flex-start;
+  margin-bottom: 50px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Columna con la imagen de la película */
+.movieColPoster {
+  flex: 1 1 45%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+  perspective: 1000px;
+}
+
+.moviePoster {
+  width: 100%;
+  max-width: 350px;
+  height: auto;
+  border-radius: 15px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 0 5px 15px rgba(0, 0, 0, 0.3);
+  transition: all 0.5s ease;
+  object-fit: cover;
+  transform-style: preserve-3d;
+}
+
+.moviePoster:hover {
+  transform: rotateY(15deg) scale(1.1);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
+}
+
+/* Columna con el texto y el botón */
+.movieColDetails {
+  flex: 1 1 45%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 0 20px;
+  position: relative;
+}
+
+.movieColDetails::after {
+  content: "";
+  position: absolute;
+  bottom: -20px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, transparent, #ff6f61, transparent);
+}
+
+.movieColDetails h2 {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #ff6f61;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  letter-spacing: -1px;
+}
+
+.movieColDetails p {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: #b0b0b0;
+  margin-bottom: 20px;
+  position: relative;
+  padding-left: 20px;
+}
+
+.movieColDetails p::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #ff6f61;
+  font-weight: bold;
+}
+
+.movieBtn {
+  background: linear-gradient(45deg, #ff6f61, #e95f52);
+  color: white;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(255, 111, 97, 0.3);
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+.movieBtn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: all 0.4s ease;
+}
+
+.movieBtn:hover::before {
+  left: 100%;
+}
+
+.movieBtn:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 15px 25px rgba(255, 111, 97, 0.4);
+}
+
+/* Estilo para la sección de películas similares */
+.similarMoviesContainer {
+  margin-top: 50px;
+  text-align: center;
+  position: relative;
+}
+
+.similarMoviesContainer h3 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #ff6f61;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.similarMoviesRow {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 20px 0;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  scrollbar-color: #ff6f61 #e0e0e0;
+}
+
+.similarMovieCard {
+  width: 220px;
+  flex-shrink: 0;
+  text-align: center;
+  color: inherit;
+  text-decoration: none;
+  transition: all 0.4s ease;
+  position: relative;
+}
+
+.similarMovieCard::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: #ff6f61;
+  transition: all 0.3s ease;
+}
+
+.similarMovieCard:hover::after {
+  left: 0;
+  width: 100%;
+}
+
+.similarMovieCard:hover {
+  transform: scale(1.05) translateY(-10px);
+}
+
+.similarMoviePoster {
+  width: 100%;
+  height: 320px;
+  border-radius: 15px;
+  object-fit: cover;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  transition: all 0.4s ease;
+}
+
+.similarMoviePoster:hover {
+  transform: scale(1.1) rotate(3deg);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.similarMovieTitle {
+  margin-top: 15px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #b0b0b0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: color 0.3s ease;
+}
+
+.similarMovieCard:hover .similarMovieTitle {
+  color: #ff6f61;
+}
+
+/* Custom scrollbar for similar movies */
+.similarMoviesRow::-webkit-scrollbar {
+  height: 10px;
+  background-color: transparent;
+}
+
+.similarMoviesRow::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, #ff6f61, #e95f52);
+  border-radius: 10px;
+}
+
+.similarMoviesRow::-webkit-scrollbar-track {
+  background-color: rgba(224, 224, 224, 0.2);
+}
