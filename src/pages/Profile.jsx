@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector} from 'react-redux';
-import { editUser, getUser } from '../Api/movieDb';
-
+import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { editUser, getUser } from "../Api/movieDb";
+import styles from "../styles/Profile.module.css"; // Import the styles
 
 const Profile = () => {
-  // Obtener el estado del usuario, token y las compras del estado global de Redux
   const { userId, token, purchases } = useSelector((state) => state.user);
   const [editing, setEditing] = useState(false);
-  const [user, setUser] = useState(false); //usuario para info inicial
-  const [userEdited, setUserEdited] = useState(); //usuario para info inicial
+  const [user, setUser] = useState(false);
+  const [userEdited, setUserEdited] = useState();
   const [orders, setOrders] = useState([]);
-
   const [formData, setFormData] = useState({
     firstname: user?.firstname || "",
     lastname: user?.lastname || "",
@@ -21,30 +19,23 @@ const Profile = () => {
     orders: user?.orders || "",
   });
 
-  
-  
-   
-    const fetchUser = async () => {
-        const userBd = await getUser(userId, token);
-        setFormData({
-            firstname: userBd?.firstname || "",
-            lastname: userBd?.lastname || "",
-            email: userBd?.email || "",
-            address: userBd?.address || "",
-            phone: userBd?.phone || "",
-            password: userBd?.password || "",
-            orders: userBd?.orders || "",
-            })
-            setUser(userBd);
-          setOrders(userBd.orders)
-    } 
+  const fetchUser = async () => {
+    const userBd = await getUser(userId, token);
+    setFormData({
+      firstname: userBd?.firstname || "",
+      lastname: userBd?.lastname || "",
+      email: userBd?.email || "",
+      address: userBd?.address || "",
+      phone: userBd?.phone || "",
+      password: userBd?.password || "",
+      orders: userBd?.orders || "",
+    });
+    setUser(userBd);
+    setOrders(userBd.orders);
+  };
 
-  
-
-   
   useEffect(() => {
-    fetchUser()
-    // Rellenar los datos del formulario si el usuario está autenticado
+    fetchUser();
     if (userEdited) {
       setFormData({
         firstname: user?.firstname,
@@ -55,11 +46,8 @@ const Profile = () => {
         password: user?.password,
       });
     }
-
-  
   }, [userEdited]);
 
-  // Función para manejar los cambios en el formulario
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -68,141 +56,164 @@ const Profile = () => {
     }));
   };
 
-  // Función para manejar el envío del formulario
   const handleSubmit = async (e) => {
-    e.preventDefault();  
-    setEditing(false);  
-    
-    const edited = await editUser(userId, token, formData)
+    e.preventDefault();
+    setEditing(false);
+    const edited = await editUser(userId, token, formData);
     console.log(edited);
     setFormData(edited);
-    /* setUser(edited) */
-    setUserEdited(edited)
+    setUserEdited(edited);
   };
 
-  // Verifica si el usuario está autenticado
   if (!token) {
-    return <div>No estás logueado</div>;
+    return <div className="alert alert-danger">No estás logueado</div>;
   }
 
   return (
-    <div className="container">
-      <h1>Perfil de Usuario</h1>
+    <div className={styles.container}>
+      <h1 className={`${styles["display-4"]} ${styles["text-center"]} mb-4`}>
+        Perfil de Usuario
+      </h1>
 
-      
-      <div className="card">
+      <div className={`${styles.card} shadow-lg border-light rounded-3`}>
         <div className="card-body">
-          <h3>Información Personal</h3>
+          <h3 className={styles["card-title"]}>Información Personal</h3>
           {!editing ? (
             <div>
-              <p><strong>Nombre:</strong> {user?.firstname} {user?.lastname}</p>
-              <p><strong>Correo electrónico:</strong> {user?.email}</p>
-              <p><strong>Dirección:</strong> {user?.address}</p>
-              <p><strong>Teléfono:</strong> {user?.phone}</p>
-              <button onClick={() => setEditing(true)} className="btn btn-primary">Editar</button>
+              <p>
+                <strong>Nombre:</strong> {user?.firstname} {user?.lastname}
+              </p>
+              <p>
+                <strong>Correo electrónico:</strong> {user?.email}
+              </p>
+              <p>
+                <strong>Dirección:</strong> {user?.address}
+              </p>
+              <p>
+                <strong>Teléfono:</strong> {user?.phone}
+              </p>
+              <button
+                onClick={() => setEditing(true)}
+                className={`btn ${styles["btn-outline-primary"]}`}
+              >
+                Editar
+              </button>
             </div>
-           ) : ( 
+          ) : (
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
-                <label htmlFor="firstname" className="form-label">Nombre</label>
+                <label htmlFor="firstname" className={styles["form-label"]}>
+                  Nombre
+                </label>
                 <input
                   type="text"
                   id="firstname"
                   name="firstname"
                   value={formData.firstname}
                   onChange={handleChange}
-                  className="form-control"
+                  className={styles["form-control"]}
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="lastname" className="form-label">Apellido</label>
+                <label htmlFor="lastname" className={styles["form-label"]}>
+                  Apellido
+                </label>
                 <input
                   type="text"
                   id="lastname"
                   name="lastname"
                   value={formData.lastname}
                   onChange={handleChange}
-                  className="form-control"
+                  className={styles["form-control"]}
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="email" className="form-label">Correo electrónico</label>
+                <label htmlFor="email" className={styles["form-label"]}>
+                  Correo electrónico
+                </label>
                 <input
                   type="email"
                   id="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="form-control"
+                  className={styles["form-control"]}
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="address" className="form-label">Dirección</label>
+                <label htmlFor="address" className={styles["form-label"]}>
+                  Dirección
+                </label>
                 <input
                   type="text"
                   id="address"
                   name="address"
                   value={formData.address}
                   onChange={handleChange}
-                  className="form-control"
+                  className={styles["form-control"]}
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="phone" className="form-label">Teléfono</label>
+                <label htmlFor="phone" className={styles["form-label"]}>
+                  Teléfono
+                </label>
                 <input
                   type="text"
                   id="phone"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="form-control"
+                  className={styles["form-control"]}
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="password" className="form-label">Constraseña</label>
+                <label htmlFor="password" className={styles["form-label"]}>
+                  Contraseña
+                </label>
                 <input
-                  type="text"
+                  type="password"
                   id="password"
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className="form-control"
+                  className={styles["form-control"]}
                 />
               </div>
-              <button type="submit" className="btn btn-success m-2">Guardar</button>
-              <button type="button" onClick={() => {setEditing(false)}} className="btn btn-light">Cancelar</button>
+              <button
+                type="submit"
+                className={`btn ${styles["btn-success"]} m-2`}
+              >
+                Guardar Cambios
+              </button>
+              <button
+                type="button"
+                onClick={() => setEditing(false)}
+                className={`btn ${styles["btn-outline-secondary"]}`}
+              >
+                Cancelar
+              </button>
             </form>
           )}
         </div>
       </div>
 
-      <div className="card mt-4">
+      <div className={`${styles.card} shadow-lg border-light rounded-3 mt-4`}>
         <div className="card-body">
-          <h3>Películas Compradas</h3>
-
-        
-
-           <ul>                     
-            {orders.map((order, index) => (
-              <div key={index}>
-                <h3>{order.id}</h3>
-                <ul>
+          <h3 className={styles["card-title"]}>Películas Compradas</h3>
+          {orders.length > 0 ? (
+            orders.map((order, index) => (
+              <div key={index} className="mb-3">
+                <h5 className={styles["text-muted"]}>Orden ID: {order.id}</h5>
+                <ul className="list-unstyled">
                   {order.movies.map((movie, index) => (
-                    <li key={index}>{ movie.title }</li>
+                    <li key={index}>{movie.title}</li>
                   ))}
                 </ul>
               </div>
-            ))}
-
-            {/* {  purchases.length > 0 ? (
-                purchases.map((order, index) => (
-                  <li key={index}>Número de orden - {order.id}</li>
-                    
-                ))
-              ) : (
-                <p>No has comprado ninguna película aún.</p>
-              )} */}
-          </ul> 
+            ))
+          ) : (
+            <p>No has comprado ninguna película aún.</p>
+          )}
         </div>
       </div>
     </div>

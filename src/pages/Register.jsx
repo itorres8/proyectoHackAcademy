@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { register } from "../Api/movieDb";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../redux/userSlice";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -15,6 +18,7 @@ const Register = () => {
 
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,13 +28,18 @@ const Register = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmitRegister = async (e) => {
     e.preventDefault();
     console.log(e);
 
     try {
-      const registro = register(formData);
-      if (user.user.token) {
+      const registro = await register(formData);
+      if (user.token) {
+        dispatch(setUser(registro));
+        toast.success("Registo realizado con éxito!", {
+          position: "top-center",
+          autoClose: 3000,
+        });
         navigate("/login");
       }
     } catch (error) {
@@ -45,7 +54,7 @@ const Register = () => {
         <div className="card p-4 bg-secondary">
           <h2>Crea una cuenta para continuar</h2>
           <p>Crea una cuenta usando correo@ejemplo.com</p>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmitRegister}>
             <div className="input-group mb-3">
               <label className="input-group-text" htmlFor="firstname">
                 Nombre

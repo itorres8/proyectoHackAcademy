@@ -1,28 +1,32 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromCart } from "../redux/cartSlice";
 import { useNavigate } from "react-router-dom";
 import { createOrder, getUser } from "../Api/movieDb";
 import { clearCart } from "../redux/cartSlice";
-
+import styles from "../styles/Cart.module.css";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Cart = () => {
   const cartItems = useSelector((state) => state.cart.cartItems);
-  const {userId, token} = useSelector((state) => state.user);
+  const { userId, token } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleRemove = (movie) => {
     dispatch(removeFromCart(movie));
+    toast.warn("Película eliminada con éxito!", {
+      position: "top-center",
+      autoClose: 3000,
+    });
   };
-  
+
   const handleCheckout = async () => {
     if (!userId || !token) {
       navigate("/login");
     } else {
       const arrayMovies = [];
-      
-
       for (let movie of cartItems) {
         const movieAuxiliar = {
           movie_id: movie.id,
@@ -32,42 +36,43 @@ const Cart = () => {
         arrayMovies.push(movieAuxiliar);
       }
       await createOrder(arrayMovies, token);
-      const userFetch = await getUser(userId, token)   
-      const { orders }= userFetch     
+      const userFetch = await getUser(userId, token);
+      const { orders } = userFetch;
+      toast.success("Compra realizada con éxito!", {
+        position: "top-center",
+        autoClose: 3000,
+      });
       dispatch(clearCart());
     }
   };
 
   const calculateTotal = () => {
-    return cartItems.reduce((total, movie) => total * movie.quantity, 0);
+    return cartItems.reduce((total, movie) => total + movie.quantity * 10, 0); // Adjusting with a price multiplier
   };
 
   return (
-    <div className="container mt-4">
-      <h2>Carrito</h2>
+    <div className={styles.cartContainer}>
+      <h2 className={styles.cartTitle}>Carrito de Compras</h2>
       {cartItems.length === 0 ? (
-        <p>Tu carrito está vacío.</p>
+        <p className={styles.emptyMessage}>Tu carrito está vacío.</p>
       ) : (
-        <div>
-          <ul className="list-group">
+        <div className={styles.cartContent}>
+          <ul className={styles.cartList}>
             {cartItems.map((movie) => (
-              <li
-                key={movie.id}
-                className="list-group-item d-flex justify-content-between align-items-center"
-              >
-                <div className="d-flex align-items-center">
+              <li key={movie.id} className={styles.cartItem}>
+                <div className={styles.cartItemDetails}>
                   <img
                     src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                     alt={movie.title}
-                    className="img-thumbnail"
-                    style={{ width: "50px" }}
+                    className={styles.moviePoster}
                   />
-                  <span className="ms-2">{movie.title}</span>
-                  {/* <span className="ms-2">Precio: ${pricePerMovie}</span> */}
-                  <span className="ms-2">Cantidad: {movie.quantity}</span>
+                  <span className={styles.movieTitle}>{movie.title}</span>
+                  <span className={styles.movieQuantity}>
+                    Cantidad: {movie.quantity}
+                  </span>
                 </div>
                 <button
-                  className="btn btn-danger btn-sm"
+                  className={styles.removeButton}
                   onClick={() => handleRemove(movie)}
                 >
                   Eliminar
@@ -75,18 +80,18 @@ const Cart = () => {
               </li>
             ))}
           </ul>
-          {}
-          <div className="mt-4">
-            <h4>Total: ${calculateTotal()}</h4> {}
-          </div>
-          {}
-          {cartItems.length > 0 && (
-            <div className="mt-4">
-              <button className="btn btn-success" onClick={handleCheckout}>
+
+          <div className={styles.totalSection}>
+            <h4>Total: ${calculateTotal()}</h4>
+            {cartItems.length > 0 && (
+              <button
+                className={styles.checkoutButton}
+                onClick={handleCheckout}
+              >
                 Finalizar Compra
               </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       )}
     </div>

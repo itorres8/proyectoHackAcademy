@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import MovieCard from "../components/MovieCard";
 import { Carousel, Dropdown } from "react-bootstrap";
 import {
@@ -7,7 +7,9 @@ import {
   fetchTopRatedMovies,
   fetchPopularMovies,
 } from "../Api/tmdbAPI";
+import { getUser } from "../Api/movieDb";
 import { useSelector } from "react-redux";
+import styles from "../styles/Home.module.css";
 
 const Home = () => {
   const [movies, setMovies] = useState([]);
@@ -45,7 +47,6 @@ const Home = () => {
     fetchMoviesAndGenres();
   }, []);
 
-
   const handleGenreChange = (genreId) => {
     setSelectedGenre(genreId);
   };
@@ -54,22 +55,41 @@ const Home = () => {
     ? movies.filter((movie) => movie.genre_ids.includes(selectedGenre))
     : movies;
 
-  if (loading) return <p>Cargando películas...</p>;
-  if (error) return <p>Error: {error}</p>;
+  const renderMovieSlides = (movies) => {
+    const chunks = [];
+    const chunkSize = 6; // Número de películas por slide
+    for (let i = 0; i < movies.length; i += chunkSize) {
+      chunks.push(movies.slice(i, i + chunkSize));
+    }
+    return chunks.map((chunk, index) => (
+      <Carousel.Item key={index}>
+        <div className={`d-flex justify-content-center ${styles.movieRow}`}>
+          {chunk.map((movie) => (
+            <div key={movie.id} className={styles.movieItem}>
+              <MovieCard movie={movie} />
+            </div>
+          ))}
+        </div>
+      </Carousel.Item>
+    ));
+  };
+
+  if (loading)
+    return <div className={styles.loadingSpinner}>Cargando películas...</div>;
+  if (error) return <div className={styles.errorMessage}>Error: {error}</div>;
 
   return (
-    <div>
-      
-      <Carousel>
+    <div className={`${styles.container} px-0`}>
+      {/* Carrusel principal */}
+      <Carousel className={styles.carousel}>
         {randomMovies.map((movie) => (
           <Carousel.Item key={movie.id}>
             <img
               src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
               alt={movie.title}
-              className="d-block w-100 img-fluid"
-              style={{ maxHeight: "500px", objectFit: "cover" }}
+              className={`${styles.carouselImage} d-block w-100 img-fluid`}
             />
-            <Carousel.Caption>
+            <Carousel.Caption className={styles.carouselCaption}>
               <h3>{movie.title}</h3>
               <p>{movie.overview.substring(0, 100)}...</p>
             </Carousel.Caption>
@@ -77,39 +97,33 @@ const Home = () => {
         ))}
       </Carousel>
 
-      <div className="container my-4">
-        <h4>Top Rated Movies</h4>
-        <div className="row">
-          {topRatedMovies.map((movie) => (
-            <div key={movie.id} className="col-md-2 mb-3">
-              <MovieCard movie={movie} />
-            </div>
-          ))}
-        </div>
+      {/* Sección de Top Rated Movies */}
+      <div className="container-fluid px-0">
+        <h4 className={`${styles.sectionTitle} px-3`}>Top Rated Movies</h4>
+        <Carousel interval={3000} controls={true} indicators={false}>
+          {renderMovieSlides(topRatedMovies)}
+        </Carousel>
       </div>
 
-      <div className="container my-4">
-        <h4>Popular Movies</h4>
-        <div className="row">
-          {popularMovies.map((movie) => (
-            <div key={movie.id} className="col-md-2 mb-3">
-              <MovieCard movie={movie} />
-            </div>
-          ))}
-        </div>
+      {/* Sección de Popular Movies */}
+      <div className="container-fluid px-0 mt-4">
+        <h4 className={`${styles.sectionTitle} px-3`}>Popular Movies</h4>
+        <Carousel interval={3000} controls={true} indicators={false}>
+          {renderMovieSlides(popularMovies)}
+        </Carousel>
       </div>
 
-      {}
-      <div className="my-3">
-        <h4>Filtrar por Género</h4>
+      {/* Filtro por género */}
+      <div className="my-3 px-3">
+        <h4 className={styles.sectionTitle}>Filtrar por Género</h4>
         <Dropdown>
-          <Dropdown.Toggle variant="success" id="dropdown-basic">
+          <Dropdown.Toggle className={styles.genreDropdown} id="dropdown-basic">
             {selectedGenre
               ? genres.find((g) => g.id === selectedGenre).name
               : "Seleccionar Género"}
           </Dropdown.Toggle>
 
-          <Dropdown.Menu>
+          <Dropdown.Menu className={styles.genreDropdown}>
             <Dropdown.Item onClick={() => handleGenreChange("")}>
               Todos
             </Dropdown.Item>
@@ -125,27 +139,19 @@ const Home = () => {
         </Dropdown>
       </div>
 
-      {}
-      <div className="row mt-4">
-        {filteredMovies.map((movie, index) => {
-          if (filteredMovies.length === index + 1) {
-            return (
-              <div
-                key={movie.id}
-                className="col-md-4 mb-3"
-                ref={lastMovieElementRef}
-              >
-                <MovieCard movie={movie} />
-              </div>
-            );
-          } else {
-            return (
-              <div key={movie.id} className="col-md-4 mb-3">
-                <MovieCard movie={movie} />
-              </div>
-            );
-          }
-        })}
+      {/* Películas filtradas */}
+      <div className={`${styles.movieGrid} ${styles.animatedSection} px-3`}>
+        {filteredMovies.map((movie, index) => (
+          <div
+            key={movie.id}
+            ref={
+              filteredMovies.length === index + 1 ? lastMovieElementRef : null
+            }
+            className={styles.movieCard}
+          >
+            <MovieCard movie={movie} />
+          </div>
+        ))}
       </div>
 
       {loading && <p>Cargando más películas...</p>}

@@ -8,7 +8,10 @@ import Register from "./pages/Register";
 import About from "./pages/About";
 import Layout from "./components/Layout";
 import NotFound from "./pages/NotFound";
-import Profile from "./pages/Profile"; 
+import Profile from "./pages/Profile";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useSelector } from "react-redux";
 
 const router = createBrowserRouter(
   [
@@ -41,9 +44,9 @@ const router = createBrowserRouter(
           element: <About />,
         },
         {
-          path: "/profile",  
-          element: <Profile />,  
-        },  
+          path: "/profile",
+          element: <Profile />,
+        },
         {
           path: "*",
           elemento: <NotFound />,
@@ -57,15 +60,33 @@ const router = createBrowserRouter(
       v7_normalizeFormMethod: true,
       v7_fetcherPersist: true,
       v7_partialHydration: true,
-      v7_skipActionErrorRevalidation: true,
+      v7_skipActionStatusRevalidation: true,
       v7_skipActionErrorRevalidation: true,
     },
   }
 );
 
 function App() {
+  const isDark = useSelector((state) => state.theme.isDark);
+
+  const themeStyles = {
+    light: {
+      backgroundColor: "#ffffff",
+      color: "#000000",
+    },
+    dark: {
+      backgroundColor: "#121212",
+      color: "#ffffff",
+    },
+  };
+
   return (
-    <RouterProvider router={router} future={{ v7_startTransition: true }} />
+    <>
+      <div style={isDark ? themeStyles.dark : themeStyles.light}>
+        <RouterProvider router={router} future={{ v7_startTransition: true }} />
+      </div>
+      <ToastContainer />
+    </>
   );
 }
 

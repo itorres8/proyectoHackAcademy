@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import cartReducer from "./cartSlice";
 import userReducer from "./userSlice";
+import themeReducer from "./themeSlice";
 import {
   FLUSH,
   REHYDRATE,
@@ -24,6 +25,7 @@ const store = configureStore({
   reducer: {
     cart: persistedCartReducer,
     user: persistedUserReducer,
+    theme: themeReducer,
   },
 
   middleware: (getDefaultMiddleware) =>

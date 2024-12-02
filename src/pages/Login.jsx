@@ -1,10 +1,12 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { login } from "../Api/movieDb";
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/userSlice";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import styles from "../styles/login.module.css";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -32,6 +34,10 @@ const Login = () => {
 
     if (datosLogin.token) {
       dispatch(setUser(datosLogin));
+      toast.success("Sesión iniciada con éxito!", {
+        position: "top-center",
+        autoClose: 3000,
+      });
       navigate("/");
     } else {
       setErrors(datosLogin.error);
@@ -39,14 +45,21 @@ const Login = () => {
   };
 
   return (
-    <div className="raw justify-content-center min-vh-100 d-flex flex-column">
-      <div>
-        <div className="col-4 mx-auto mb-3 ">
-          <i className="bi bi-0-circle"></i>
-
-          <div className="card p-4 bg-secondary">
-            <h2>Escribir correo para continuar</h2>
-            <p>
+    <div
+      className={`${styles.loginContainer} raw justify-content-center min-vh-100 d-flex flex-column`}
+    >
+      <div className={styles.loginWrapper}>
+        <div className="col-4 mx-auto mb-3">
+          <img
+            src="https://scholar.harvard.edu/sites/scholar.harvard.edu/files/styles/os_files_xxlarge/public/hackathon/files/hackplus.png?m=1596385410&itok=mYxdU-K8"
+            alt="HackPlus Logo"
+            className={styles.logo}
+          />
+          <div className={`${styles.loginCard} card p-4 bg-secondary`}>
+            <h2 className={styles.loginTitle}>
+              Escribir correo para continuar
+            </h2>
+            <p className={styles.loginSubtitle}>
               Es necesario iniciar sesión con tu cuenta de HackPlus. En caso de
               no tener una recibirás indicaciones para crearla.
             </p>
@@ -57,7 +70,7 @@ const Login = () => {
                 </label>
                 <input
                   id="email"
-                  className="form-control"
+                  className={`${styles.inputField} form-control`}
                   type="email"
                   placeholder="Correo electrónico"
                   name="email"
@@ -72,7 +85,7 @@ const Login = () => {
                 </label>
                 <input
                   id="password"
-                  className="form-control"
+                  className={`${styles.inputField} form-control`}
                   type="password"
                   placeholder="Contraseña.."
                   name="password"
@@ -80,24 +93,12 @@ const Login = () => {
                   onChange={handleChange}
                   required
                 />
-                {errors && <p>{errors}</p>}
+                {errors && <p className={styles.errorMessage}>{errors}</p>}
               </div>
-              <div className="">
+              <div>
                 <button
-                  className="btn btn-success"
+                  className={`${styles.submitButton} btn btn-success`}
                   type="submit"
-                  style={{
-                    transition: "all 0.3s ease",
-                    padding: "8px 15px",
-                    fontWeightP: "500",
-                    letterSpacing: "0.5px",
-                  }}
-                  onKeyPress={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                      e.target.click();
-                    }
-                  }}
                 >
                   Continuar
                 </button>
@@ -105,11 +106,13 @@ const Login = () => {
             </form>
           </div>
         </div>
-
         <div className="col-4 mx-auto">
-          <hr />
-          <p>
-            ¿No tenés una cuenta? <Link to="/register">Registrate ahora</Link>
+          <hr className={styles.divider} />
+          <p className={styles.registerText}>
+            ¿No tenés una cuenta?{" "}
+            <Link to="/register" className={styles.registerLink}>
+              Registrate ahora
+            </Link>
           </p>
         </div>
       </div>
