@@ -93,6 +93,8 @@ const Login = () => {
                   onChange={handleChange}
                   required
                 />
+              </div>
+              <div>
                 {errors && <p className={styles.errorMessage}>{errors}</p>}
               </div>
               <div>

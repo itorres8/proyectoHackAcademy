@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { editUser, getUser } from "../Api/movieDb";
-import styles from "../styles/Profile.module.css"; // Import the styles
+import styles from "../styles/Profile.module.css";
+import { deleteUser } from "../Api/movieDb";
+import { logout } from "../redux/userSlice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import global from "../styles/Global.module.css";
 
 const Profile = () => {
   const { userId, token, purchases } = useSelector((state) => state.user);
@@ -18,6 +23,8 @@ const Profile = () => {
     password: user?.password || "",
     orders: user?.orders || "",
   });
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const fetchUser = async () => {
     const userBd = await getUser(userId, token);
@@ -65,15 +72,19 @@ const Profile = () => {
     setUserEdited(edited);
   };
 
+  const handleDelete = async () => {
+    const deleted = await deleteUser(userId, token);
+    dispatch(logout());
+    navigate("/");
+  };
+
   if (!token) {
     return <div className="alert alert-danger">No estás logueado</div>;
   }
 
   return (
     <div className={styles.container}>
-      <h1 className={`${styles["display-4"]} ${styles["text-center"]} mb-4`}>
-        Perfil de Usuario
-      </h1>
+      <h1 className={`${global["title"]} mb-4`}>Perfil de Usuario</h1>
 
       <div className={`${styles.card} shadow-lg border-light rounded-3`}>
         <div className="card-body">
@@ -196,6 +207,15 @@ const Profile = () => {
           )}
         </div>
       </div>
+      <div>
+        <button
+          type="button"
+          onClick={() => handleDelete()}
+          className={`btn ${styles["btn-outline-secondary"]}`}
+        >
+          Borrar ususario
+        </button>
+      </div>
 
       <div className={`${styles.card} shadow-lg border-light rounded-3 mt-4`}>
         <div className="card-body">
@@ -221,27 +241,3 @@ const Profile = () => {
 };
 
 export default Profile;
-
-/* const comments = [
-  { text: 'Great post!', replies: ['Thanks!', 'Awesome!'] },
-  { text: 'Nice article', replies: ['Agreed!', 'Very helpful.'] }
-];
-
-function CommentList() {
-  return (
-    <div>
-      {comments.flatMap(comment => [
-        <p key={comment.text}>{comment.text}</p>,
-        ...comment.replies.map(reply => <p key={reply} style={{ paddingLeft: '20px' }}>{reply}</p>)
-      ])}
-    </div>
-  );
-} */
-/* 
-
-  <div>
-  {purchases.flatMap(order => [
-    <p key={order.id}>Número de orden - {order.id}</p>,
-    ...order.movies.map(movie => <p key={movie.movie_id+order.id} style={{ paddingLeft: '20px' }}>{movie.title}</p>)
-  ])}
-</div> */

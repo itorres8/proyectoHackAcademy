@@ -1,0 +1,22 @@
+.title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  text-align: center;
+  color: #ff6f61;
+  margin-bottom: 40px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  position: relative;
+  text-shadow: 0 4px 15px rgba(255, 111, 97, 0.3);
+}
+
+.title::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(to right, transparent, #ff6f61, transparent);
+  transform: translateX(-50%);
+}

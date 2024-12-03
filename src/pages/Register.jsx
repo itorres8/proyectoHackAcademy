@@ -34,8 +34,7 @@ const Register = () => {
 
     try {
       const registro = await register(formData);
-      if (user.token) {
-        dispatch(setUser(registro));
+      if (registro) {
         toast.success("Registo realizado con éxito!", {
           position: "top-center",
           autoClose: 3000,

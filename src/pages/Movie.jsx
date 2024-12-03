@@ -1,88 +1,114 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { addToCart } from "../redux/cartSlice"; // Acción de Redux para agregar al carrito
+import { addToCart } from "../redux/cartSlice";
 import {
   fetchMovieDetails,
-  fetchMovies,
   fetchMovieCredits,
-} from "../Api/tmdbAPI"; // Funciones de la API de TMDb
-import styles from "../styles/Movie.module.css"; // Estilos del componente
+  fetchMovies,
+  searchMovies,
+} from "../Api/tmdbAPI";
+import styles from "../styles/Movie.module.css";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { setPrice } from "../redux/userSlice";
+import { getPriceById } from "../Api/movieDb";
+import { useSelector } from "react-redux";
 
 const Movie = () => {
-  const { id } = useParams(); // Obtener el parámetro dinámico `id` de la URL
-  const [movie, setMovie] = useState(null); // Estado para los detalles de la película
-  const [similarMovies, setSimilarMovies] = useState([]); // Estado para las películas similares
-  const dispatch = useDispatch(); // Hook de Redux para despachar acciones
+  const { id } = useParams();
+  const [movie, setMovie] = useState(null);
+  const [similarMovies, setSimilarMovies] = useState([]);
+  const dispatch = useDispatch();
+  const price = useSelector((state) => state.user.price);
+  const cartItems = useSelector((state) => state.cart.cartItems);
 
-  // Obtener detalles de la película y cargar películas similares
+  const findSimilarMovies = async (movie) => {
+    if (!movie) return [];
+
+    try {
+      const credits = await fetchMovieCredits(movie.id);
+      const director = credits.crew.find((person) => person.job === "Director");
+
+      let similarMoviesSet = new Set();
+
+      if (director) {
+        const directorMovies = await fetchMovies({
+          with_crew: director.id,
+        });
+        directorMovies.forEach((m) => {
+          if (m.id !== movie.id && m.poster_path) {
+            similarMoviesSet.add(m);
+          }
+        });
+      }
+
+      if (similarMoviesSet.size < 5) {
+        const firstWord = movie.title
+          .split(/\s+/)
+          .find((word) => word.length > 3);
+
+        if (firstWord) {
+          const titleMovies = await searchMovies(firstWord);
+          titleMovies.forEach((m) => {
+            if (
+              m.id !== movie.id &&
+              m.poster_path &&
+              !similarMoviesSet.has(m)
+            ) {
+              similarMoviesSet.add(m);
+            }
+          });
+        }
+      }
+
+      return Array.from(similarMoviesSet).slice(0, 10);
+    } catch (error) {
+      console.error("Error finding similar movies:", error);
+      return [];
+    }
+  };
+
   useEffect(() => {
     const getMovieDetails = async () => {
       try {
-        const data = await fetchMovieDetails(id); // Llamada para obtener detalles de la película
+        const data = await fetchMovieDetails(id);
         setMovie(data);
 
         if (data) {
-          // Obtener el director y películas relacionadas
-          const director = await fetchDirector(data.id);
-          const similarByName = await fetchMovies({
-            query: data.title.split(":")[0],
-          });
-          const similarByDirector = director
-            ? await fetchMovies({ with_crew: director.id })
-            : [];
-          const similarByGenre =
-            data.genres.length > 0
-              ? await fetchMovies({ with_genres: data.genres[0].id })
-              : [];
-
-          // Combinar y filtrar las películas similares
-          const combinedMovies = [
-            ...similarByName,
-            ...similarByDirector,
-            ...similarByGenre,
-          ];
-          const uniqueMovies = combinedMovies.filter(
-            (movie, index, self) =>
-              index === self.findIndex((m) => m.id === movie.id)
-          );
-
-          setSimilarMovies(uniqueMovies.slice(0, 5)); // Mostrar solo las 5 primeras
+          const similarMovies = await findSimilarMovies(data);
+          setSimilarMovies(similarMovies);
         }
       } catch (error) {
-        console.error("Error al cargar detalles de la película:", error);
+        console.error("Error loading movie details:", error);
       }
     };
 
     getMovieDetails();
   }, [id]);
 
-  // Obtener el director de los créditos de la película
-  const fetchDirector = async (movieId) => {
-    const credits = await fetchMovieCredits(movieId);
-    const director = credits.crew.find((person) => person.job === "Director");
-    return director;
-  };
+  console.log(movie);
 
-  // Manejar la acción de agregar al carrito
   const handleAddToCart = () => {
-    if (movie) {
+    const isMovieInCart = cartItems.find((item) => item.id === movie.id);
+    if (!isMovieInCart) {
       dispatch(addToCart(movie));
       toast.success("Película agregada al carrito con éxito!", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+    } else {
+      toast.error("La película ya esta en el carrito", {
         position: "top-center",
         autoClose: 3000,
       });
     }
   };
 
-  // Mostrar un mensaje de carga mientras no haya datos
-  if (!movie) return <div>Loading...</div>;
+  if (!movie) return <div>Cargando...</div>;
 
   return (
     <div className={styles.movieContainer}>
-      {/* Detalles de la película */}
       <div className={styles.movieRow}>
         <div className={styles.movieColPoster}>
           <img
@@ -98,8 +124,11 @@ const Movie = () => {
             <strong>Fecha de lanzamiento:</strong> {movie.release_date}
           </p>
           <p>
-            <strong>Géneros:</strong>{" "}
+            <strong>Géneros:</strong>
             {movie.genres.map((genre) => genre.name).join(", ")}
+          </p>
+          <p>
+            <strong>Precio:</strong> ${price}
           </p>
           <button className={styles.movieBtn} onClick={handleAddToCart}>
             Agregar al Carrito
@@ -107,7 +136,6 @@ const Movie = () => {
         </div>
       </div>
 
-      {/* Películas similares */}
       {similarMovies.length > 0 && (
         <div className={styles.similarMoviesContainer}>
           <h3>Películas Similares</h3>
