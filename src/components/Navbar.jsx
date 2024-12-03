@@ -76,7 +76,7 @@ function NavScrollExample() {
           className="d-flex align-items-center"
           style={{ marginRight: "5px" }}
         >
-          Hackflix
+          HackPlus
         </Navbar.Brand>
         <Nav className="me-auto my-2 my-lg-0 d-flex align-items-center">
           <Nav.Link as={Link} to="/" className="ms-2">
@@ -84,7 +84,7 @@ function NavScrollExample() {
           </Nav.Link>
         </Nav>
         <div className="d-flex justify-content-center flex-grow-1">
-          <Form className="d-flex w-100">
+          <Form className="d-flex w-50">
             <Form.Control
               type="search"
               placeholder="Buscar"
@@ -129,7 +129,7 @@ function NavScrollExample() {
               title="Perfil"
               id="navbarScrollingDropdown"
               className={isDark ? "bg-dark text-light" : "bg-light text-dark"}
-              style={{ marginRight: "-8px" }}
+              style={{ marginRight: "-8px", marginLeft: "15px" }}
             >
               <NavDropdown.Item>
                 <NavLink
@@ -139,7 +139,6 @@ function NavScrollExample() {
                   Mi Perfil
                 </NavLink>
               </NavDropdown.Item>
-              <NavDropdown.Item href="#action3">Suscripción</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item onClick={userLogout}>
                 Cerrar Sesión

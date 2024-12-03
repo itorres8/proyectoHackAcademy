@@ -7,10 +7,11 @@ import { clearCart } from "../redux/cartSlice";
 import styles from "../styles/Cart.module.css";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import global from "../styles/Global.module.css";
 
 const Cart = () => {
   const cartItems = useSelector((state) => state.cart.cartItems);
-  const { userId, token } = useSelector((state) => state.user);
+  const { userId, token, price } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -47,12 +48,15 @@ const Cart = () => {
   };
 
   const calculateTotal = () => {
-    return cartItems.reduce((total, movie) => total + movie.quantity * 10, 0); // Adjusting with a price multiplier
+    return cartItems.reduce(
+      (total, movie) => total + movie.quantity * price,
+      0
+    );
   };
 
   return (
     <div className={styles.cartContainer}>
-      <h2 className={styles.cartTitle}>Carrito de Compras</h2>
+      <h2 className={global["title"]}>Carrito de Compras</h2>
       {cartItems.length === 0 ? (
         <p className={styles.emptyMessage}>Tu carrito está vacío.</p>
       ) : (
@@ -67,9 +71,6 @@ const Cart = () => {
                     className={styles.moviePoster}
                   />
                   <span className={styles.movieTitle}>{movie.title}</span>
-                  <span className={styles.movieQuantity}>
-                    Cantidad: {movie.quantity}
-                  </span>
                 </div>
                 <button
                   className={styles.removeButton}

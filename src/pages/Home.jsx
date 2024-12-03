@@ -7,9 +7,11 @@ import {
   fetchTopRatedMovies,
   fetchPopularMovies,
 } from "../Api/tmdbAPI";
-import { getUser } from "../Api/movieDb";
+import { getUser, getPriceById } from "../Api/movieDb";
 import { useSelector } from "react-redux";
 import styles from "../styles/Home.module.css";
+import { useDispatch } from "react-redux";
+import { setPrice } from "../redux/userSlice";
 
 const Home = () => {
   const [movies, setMovies] = useState([]);
@@ -21,6 +23,7 @@ const Home = () => {
   const lastMovieElementRef = useRef(null);
   const [topRatedMovies, setTopRatedMovies] = useState([]);
   const [popularMovies, setPopularMovies] = useState([]);
+  const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user);
 
@@ -31,6 +34,9 @@ const Home = () => {
         const genreData = await fetchGenres();
         const topRatedData = await fetchTopRatedMovies();
         const popularData = await fetchPopularMovies();
+        const getPriceByIdData = await getPriceById(2);
+        console.log(getPriceByIdData);
+        dispatch(setPrice(getPriceByIdData));
 
         setMovies(movieData);
         setRandomMovies(movieData.sort(() => 0.5 - Math.random()).slice(0, 5));
@@ -57,7 +63,7 @@ const Home = () => {
 
   const renderMovieSlides = (movies) => {
     const chunks = [];
-    const chunkSize = 6; // Número de películas por slide
+    const chunkSize = 6;
     for (let i = 0; i < movies.length; i += chunkSize) {
       chunks.push(movies.slice(i, i + chunkSize));
     }
@@ -80,7 +86,6 @@ const Home = () => {
 
   return (
     <div className={`${styles.container} px-0`}>
-      {/* Carrusel principal */}
       <Carousel className={styles.carousel}>
         {randomMovies.map((movie) => (
           <Carousel.Item key={movie.id}>
@@ -97,23 +102,22 @@ const Home = () => {
         ))}
       </Carousel>
 
-      {/* Sección de Top Rated Movies */}
       <div className="container-fluid px-0">
-        <h4 className={`${styles.sectionTitle} px-3`}>Top Rated Movies</h4>
+        <h4 className={`${styles.sectionTitle} px-3`}>
+          Peliculas mejor calificadas
+        </h4>
         <Carousel interval={3000} controls={true} indicators={false}>
           {renderMovieSlides(topRatedMovies)}
         </Carousel>
       </div>
 
-      {/* Sección de Popular Movies */}
       <div className="container-fluid px-0 mt-4">
-        <h4 className={`${styles.sectionTitle} px-3`}>Popular Movies</h4>
+        <h4 className={`${styles.sectionTitle} px-3`}>Peliculas Populares</h4>
         <Carousel interval={3000} controls={true} indicators={false}>
           {renderMovieSlides(popularMovies)}
         </Carousel>
       </div>
 
-      {/* Filtro por género */}
       <div className="my-3 px-3">
         <h4 className={styles.sectionTitle}>Filtrar por Género</h4>
         <Dropdown>
@@ -139,7 +143,6 @@ const Home = () => {
         </Dropdown>
       </div>
 
-      {/* Películas filtradas */}
       <div className={`${styles.movieGrid} ${styles.animatedSection} px-3`}>
         {filteredMovies.map((movie, index) => (
           <div

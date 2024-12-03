@@ -10,14 +10,11 @@ const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action) => {
       const movie = action.payload;
-
       const existingMovie = state.cartItems.find(
         (item) => item.id === movie.id
       );
 
-      if (existingMovie) {
-        existingMovie.quantity += 1;
-      } else {
+      if (!existingMovie) {
         state.cartItems.push({ ...movie, quantity: 1 });
       }
     },

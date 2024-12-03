@@ -1,8 +1,13 @@
 const API_KEY = "27e832013fc9f93ce3fd2285600967ca";
 const BASE_URL = "https://api.themoviedb.org/3";
 
-const fetchMovies = async () => {
-  const response = await fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}`);
+const fetchMovies = async (params = {}) => {
+  const queryParams = new URLSearchParams({
+    api_key: API_KEY,
+    ...params,
+  });
+
+  const response = await fetch(`${BASE_URL}/discover/movie?${queryParams}`);
   if (!response.ok) throw new Error("Error al cargar las películas");
   const data = await response.json();
   return data.results;
@@ -34,7 +39,9 @@ const fetchMovieCredits = async (id) => {
 };
 
 const fetchTopRatedMovies = async () => {
-  const response = await fetch(`${BASE_URL}/movie/top_rated?api_key=${API_KEY}`);
+  const response = await fetch(
+    `${BASE_URL}/movie/top_rated?api_key=${API_KEY}`
+  );
   if (!response.ok) throw new Error("Error al cargar películas top rated");
   const data = await response.json();
   return data.results;
@@ -49,14 +56,21 @@ const fetchPopularMovies = async () => {
 
 const searchMovies = async (query) => {
   const response = await fetch(
-    `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`
+    `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(
+      query
+    )}`
   );
   if (!response.ok) throw new Error("Error al buscar películas");
   const data = await response.json();
   return data.results;
 };
 
-export { fetchMovies, fetchGenres, fetchMovieDetails, fetchMovieCredits, fetchTopRatedMovies, fetchPopularMovies, searchMovies };
-
-
-
+export {
+  fetchMovies,
+  fetchGenres,
+  fetchMovieDetails,
+  fetchMovieCredits,
+  fetchTopRatedMovies,
+  fetchPopularMovies,
+  searchMovies,
+};

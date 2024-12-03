@@ -23,7 +23,6 @@
   z-index: 1;
 }
 
-/* Contenedor principal de la película */
 .movieRow {
   display: flex;
   flex-wrap: wrap;
@@ -35,7 +34,6 @@
   z-index: 2;
 }
 
-/* Columna con la imagen de la película */
 .movieColPoster {
   flex: 1 1 45%;
   box-sizing: border-box;
@@ -62,7 +60,6 @@
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
 }
 
-/* Columna con el texto y el botón */
 .movieColDetails {
   flex: 1 1 45%;
   box-sizing: border-box;
@@ -150,7 +147,6 @@
   box-shadow: 0 15px 25px rgba(255, 111, 97, 0.4);
 }
 
-/* Estilo para la sección de películas similares */
 .similarMoviesContainer {
   margin-top: 50px;
   text-align: center;
@@ -234,7 +230,6 @@
   color: #ff6f61;
 }
 
-/* Custom scrollbar for similar movies */
 .similarMoviesRow::-webkit-scrollbar {
   height: 10px;
   background-color: transparent;

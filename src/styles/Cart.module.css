@@ -135,7 +135,6 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .cartContainer {
     padding: 1rem;
@@ -159,7 +158,6 @@
   }
 }
 
-/* Subtle Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;

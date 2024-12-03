@@ -1,10 +1,11 @@
 import React from "react";
-import styles from "../styles/About.module.css"; // Asegúrate de que el archivo CSS esté correctamente importado
+import styles from "../styles/About.module.css";
+import global from "../styles/Global.module.css";
 
 const About = () => {
   return (
     <div className={styles["about-container"]}>
-      <h1 className={styles["about-title"]}>Acerca de Nosotros</h1>
+      <h1 className={global["title"]}>Acerca de Nosotros</h1>
       <div className={styles["about-image"]}>
         <img
           src="https://scholar.harvard.edu/sites/scholar.harvard.edu/files/styles/os_files_xxlarge/public/hackathon/files/hackplus.png?m=1596385410&itok=mYxdU-K8"

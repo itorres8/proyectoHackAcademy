@@ -11,7 +11,7 @@ export const register = async (user) => {
     });
 
     const data = await response.json();
-    console.log(data);
+    return data;
   } catch (error) {}
 };
 
@@ -42,7 +42,7 @@ export const getUser = async (id, token) => {
       },
     });
     const data = await response.json();
-    
+
     return data;
   } catch (err) {
     return null;
@@ -50,13 +50,11 @@ export const getUser = async (id, token) => {
 };
 
 export const createOrder = async (movies, token) => {
-  
   const order = {
     type: "movie",
     data: movies,
   };
 
-  
   try {
     const response = await fetch(`${url}/orders`, {
       method: "POST",
@@ -74,13 +72,12 @@ export const createOrder = async (movies, token) => {
 };
 
 export const editUser = async (id, token, formData) => {
-  
   const userUpdate = {
     firstname: formData.firstname,
     lastname: formData.lastname,
     email: formData.email,
     password: formData.password,
-  }
+  };
 
   try {
     const response = await fetch(`${url}/users/${id}`, {
@@ -90,6 +87,48 @@ export const editUser = async (id, token, formData) => {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(userUpdate),
+    });
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const getPrice = async () => {
+  try {
+    const response = await fetch(`${url}/prices`, {
+      method: "GET",
+    });
+    const data = await response.json();
+
+    return data;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const getPriceById = async (id) => {
+  try {
+    const response = await fetch(`${url}/prices/${id}`, {
+      method: "GET",
+    });
+    const data = await response.json();
+
+    return data;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const deleteUser = async (id, token) => {
+  try {
+    const response = await fetch(`${url}/users/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
     const data = await response.json();
     console.log(data);
