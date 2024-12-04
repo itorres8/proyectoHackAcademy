@@ -22,6 +22,7 @@ const Movie = () => {
   const [movie, setMovie] = useState(null);
   const [similarMovies, setSimilarMovies] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isAddedToCart, setIsAddedToCart] = useState(false);
   const dispatch = useDispatch();
   const price = useSelector((state) => state.user.price);
   const cartItems = useSelector((state) => state.cart.cartItems);
@@ -100,6 +101,8 @@ const Movie = () => {
         position: "top-center",
         autoClose: 3000,
       });
+      setIsAddedToCart(true);
+      setTimeout(() => setIsAddedToCart(false), 1420);
     } else {
       toast.error("La película ya esta en el carrito", {
         position: "top-center",
@@ -122,7 +125,9 @@ const Movie = () => {
           <img
             src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
             alt={movie.title}
-            className={styles.moviePoster}
+            className={`${styles.moviePoster} ${
+              isAddedToCart ? styles.posterAnimate : ""
+            }`}
           />
         </div>
         <div className={styles.movieColDetails}>
