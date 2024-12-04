@@ -7,6 +7,7 @@ import { logout } from "../redux/userSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import global from "../styles/Global.module.css";
+import Spinner from "../components/Spinner";
 
 const Profile = () => {
   const { userId, token, purchases } = useSelector((state) => state.user);
@@ -23,10 +24,14 @@ const Profile = () => {
     password: user?.password || "",
     orders: user?.orders || "",
   });
+
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const fetchUser = async () => {
+    setLoading(true);
     const userBd = await getUser(userId, token);
     setFormData({
       firstname: userBd?.firstname || "",
@@ -39,6 +44,7 @@ const Profile = () => {
     });
     setUser(userBd);
     setOrders(userBd.orders);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -57,25 +63,37 @@ const Profile = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    if (name === "password") {
+      setPassword(value);
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setEditing(false);
+    setLoading(true);
+    const editedData = {
+      ...formData,
+      password: showPassword ? password : "",
+    };
     const edited = await editUser(userId, token, formData);
     console.log(edited);
     setFormData(edited);
     setUserEdited(edited);
+    setLoading(false);
   };
 
   const handleDelete = async () => {
+    setLoading(true);
     const deleted = await deleteUser(userId, token);
     dispatch(logout());
     navigate("/");
+    setLoading(false);
   };
 
   if (!token) {
@@ -85,6 +103,12 @@ const Profile = () => {
   return (
     <div className={styles.container}>
       <h1 className={`${global["title"]} mb-4`}>Perfil de Usuario</h1>
+
+      {loading && (
+        <div className={global.overlay}>
+          <Spinner />
+        </div>
+      )}
 
       <div className={`${styles.card} shadow-lg border-light rounded-3`}>
         <div className="card-body">
@@ -177,19 +201,34 @@ const Profile = () => {
                   className={styles["form-control"]}
                 />
               </div>
-              <div className="mb-3">
-                <label htmlFor="password" className={styles["form-label"]}>
-                  Contraseña
-                </label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className={styles["form-control"]}
-                />
-              </div>
+              {showPassword && (
+                <div className="mb-3">
+                  <label htmlFor="password" className={styles["form-label"]}>
+                    Contraseña
+                  </label>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    value={password}
+                    onChange={handleChange}
+                    className={styles["form-control"]}
+                  />
+                </div>
+              )}
+
+              <button
+                type="button"
+                onClick={() => {
+                  setShowPassword(!showPassword);
+                  if (!showPassword) {
+                    setPassword("");
+                  }
+                }}
+                className={`btn ${styles["btn-link"]}`}
+              >
+                {showPassword ? "Cancelar" : "Cambiar contraseña"}
+              </button>
               <button
                 type="submit"
                 className={`btn ${styles["btn-success"]} m-2`}
@@ -197,8 +236,11 @@ const Profile = () => {
                 Guardar Cambios
               </button>
               <button
-                type="button"
-                onClick={() => setEditing(false)}
+                onClick={() => {
+                  setEditing(false);
+                  setShowPassword(false);
+                  setPassword("");
+                }}
                 className={`btn ${styles["btn-outline-secondary"]}`}
               >
                 Cancelar

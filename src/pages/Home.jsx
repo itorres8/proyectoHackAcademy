@@ -12,6 +12,9 @@ import { useSelector } from "react-redux";
 import styles from "../styles/Home.module.css";
 import { useDispatch } from "react-redux";
 import { setPrice } from "../redux/userSlice";
+import global from "../styles/Global.module.css";
+import Spinner from "../components/Spinner";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const [movies, setMovies] = useState([]);
@@ -35,7 +38,7 @@ const Home = () => {
         const topRatedData = await fetchTopRatedMovies();
         const popularData = await fetchPopularMovies();
         const getPriceByIdData = await getPriceById(2);
-        console.log(getPriceByIdData);
+
         dispatch(setPrice(getPriceByIdData));
 
         setMovies(movieData);
@@ -69,7 +72,7 @@ const Home = () => {
     }
     return chunks.map((chunk, index) => (
       <Carousel.Item key={index}>
-        <div className={`d-flex justify-content-center ${styles.movieRow}`}>
+        <div className={`d-flex justify-content-center  ${styles.movieRow}`}>
           {chunk.map((movie) => (
             <div key={movie.id} className={styles.movieItem}>
               <MovieCard movie={movie} />
@@ -80,12 +83,18 @@ const Home = () => {
     ));
   };
 
-  if (loading)
-    return <div className={styles.loadingSpinner}>Cargando películas...</div>;
+  if (loading) {
+    return (
+      <div className={global.overlay}>
+        <Spinner />
+      </div>
+    );
+  }
+
   if (error) return <div className={styles.errorMessage}>Error: {error}</div>;
 
   return (
-    <div className={`${styles.container} px-0`}>
+    <div className={`${global.container} pt-0 px-0`}>
       <Carousel className={styles.carousel}>
         {randomMovies.map((movie) => (
           <Carousel.Item key={movie.id}>
@@ -94,10 +103,12 @@ const Home = () => {
               alt={movie.title}
               className={`${styles.carouselImage} d-block w-100 img-fluid`}
             />
-            <Carousel.Caption className={styles.carouselCaption}>
-              <h3>{movie.title}</h3>
-              <p>{movie.overview.substring(0, 100)}...</p>
-            </Carousel.Caption>
+            <Link to={`/movie/${movie.id}`}>
+              <Carousel.Caption className={styles.carouselCaption}>
+                <h3>{movie.title}</h3>
+                <p>{movie.overview.substring(0, 100)}...</p>
+              </Carousel.Caption>
+            </Link>
           </Carousel.Item>
         ))}
       </Carousel>
@@ -128,13 +139,17 @@ const Home = () => {
           </Dropdown.Toggle>
 
           <Dropdown.Menu className={styles.genreDropdown}>
-            <Dropdown.Item onClick={() => handleGenreChange("")}>
+            <Dropdown.Item
+              onClick={() => handleGenreChange("")}
+              className={styles.dropdownItem}
+            >
               Todos
             </Dropdown.Item>
             {genres.map((genre) => (
               <Dropdown.Item
                 key={genre.id}
                 onClick={() => handleGenreChange(genre.id)}
+                className={styles.dropdownItem}
               >
                 {genre.name}
               </Dropdown.Item>

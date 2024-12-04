@@ -76,6 +76,8 @@ export const editUser = async (id, token, formData) => {
     firstname: formData.firstname,
     lastname: formData.lastname,
     email: formData.email,
+    phone: formData.phone,
+    address: formData.address,
     password: formData.password,
   };
 
