@@ -9,7 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../redux/userSlice";
 import { searchMovies } from "../Api/tmdbAPI";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -19,6 +19,7 @@ function NavScrollExample() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const cartItems = useSelector((state) => state.cart.cartItems);
   const userState = useSelector((state) => state.user);
   const isDark = useSelector((state) => state.theme.isDark);
@@ -37,6 +38,7 @@ function NavScrollExample() {
   const handleSearchChange = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
+    setSelectedIndex(0);
 
     if (query.trim()) {
       const fetchSearchResults = async () => {
@@ -60,12 +62,34 @@ function NavScrollExample() {
     navigate(`/movie/${id}`);
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "ArrowDown") {
+      setSelectedIndex((prevIndex) =>
+        Math.min(prevIndex + 1, searchResults.length - 1)
+      );
+    } else if (e.key === "ArrowUp") {
+      setSelectedIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+    } else if (e.key === "Enter" && selectedIndex !== null) {
+      handleResultClick(searchResults[selectedIndex].id);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedIndex !== null && searchResults.length > 0) {
+      const dropdownItems = document.querySelectorAll(".dropdown-item");
+      dropdownItems[selectedIndex]?.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
+    }
+  }, [selectedIndex, searchResults]);
+
   return (
     <Navbar
       expand="lg"
       className={`bg-${isDark ? "dark" : "body-tertiary"} text-${
         isDark ? "light" : "dark"
-      }`}
+      } `}
       variant={isDark ? "dark" : "light"}
       style={{ marginRight: "-8px" }}
     >
@@ -76,10 +100,19 @@ function NavScrollExample() {
           className="d-flex align-items-center"
           style={{ marginRight: "5px" }}
         >
-          HackPlus
+          <img
+            src={
+              isDark
+                ? "../src/assets/logotipo-darkmode.svg"
+                : "../src/assets/logotipo-lightmode.svg"
+            }
+            alt="logo"
+            width="auto"
+            height="30"
+          />
         </Navbar.Brand>
         <Nav className="me-auto my-2 my-lg-0 d-flex align-items-center">
-          <Nav.Link as={Link} to="/" className="ms-2">
+          <Nav.Link as={Link} to="/" className={"d-flex align-items-center "}>
             Inicio
           </Nav.Link>
         </Nav>
@@ -92,20 +125,27 @@ function NavScrollExample() {
               aria-label="Search"
               value={searchQuery}
               onChange={handleSearchChange}
+              onKeyDown={handleKeyDown}
             />
-            <Button variant="success" type="submit">
+            <Button
+              style={{ backgroundColor: "#F16E61", borderColor: "#F16E61" }}
+              type="submit"
+            >
               <i className="bi bi-search"></i>
             </Button>
+
             {searchQuery && searchResults.length > 0 && isDropdownOpen && (
               <div
                 className="dropdown-menu show"
                 style={{ position: "absolute", zIndex: 1000, top: 50 }}
               >
-                {searchResults.map((movie) => (
+                {searchResults.map((movie, index) => (
                   <Link
                     key={movie.id}
                     to="#"
-                    className="dropdown-item"
+                    className={`dropdown-item ${
+                      selectedIndex === index ? "bg-info text-white" : ""
+                    }`}
                     onClick={() => handleResultClick(movie.id)}
                   >
                     {movie.title}
@@ -115,29 +155,25 @@ function NavScrollExample() {
             )}
           </Form>
         </div>
-        <Nav.Link
-          as={Link}
-          to="/About"
-          className="d-flex align-items-center"
-          style={{ marginLeft: "10px" }}
-        >
-          Acerca de Nosotros
-        </Nav.Link>
+        <Nav className="me-auto my-2 my-lg-0 d-flex align-items-center">
+          <Nav.Link
+            as={Link}
+            to="/About"
+            className={"d-flex align-items-center "}
+            style={{ marginLeft: "10px" }}
+          >
+            Acerca de Nosotros
+          </Nav.Link>
+        </Nav>
         <Nav className="ms-auto d-flex align-items-center">
           {userState.token !== "" ? (
             <NavDropdown
               title="Perfil"
               id="navbarScrollingDropdown"
-              className={isDark ? "bg-dark text-light" : "bg-light text-dark"}
               style={{ marginRight: "-8px", marginLeft: "15px" }}
             >
-              <NavDropdown.Item>
-                <NavLink
-                  to="/profile"
-                  style={{ textDecoration: "none", color: "inherit" }}
-                >
-                  Mi Perfil
-                </NavLink>
+              <NavDropdown.Item onClick={() => navigate("/profile")}>
+                Mi Perfil
               </NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item onClick={userLogout}>

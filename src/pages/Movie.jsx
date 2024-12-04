@@ -14,11 +14,14 @@ import "react-toastify/dist/ReactToastify.css";
 import { setPrice } from "../redux/userSlice";
 import { getPriceById } from "../Api/movieDb";
 import { useSelector } from "react-redux";
+import Spinner from "../components/Spinner";
+import global from "../styles/Global.module.css";
 
 const Movie = () => {
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
   const [similarMovies, setSimilarMovies] = useState([]);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const price = useSelector((state) => state.user.price);
   const cartItems = useSelector((state) => state.cart.cartItems);
@@ -71,6 +74,7 @@ const Movie = () => {
 
   useEffect(() => {
     const getMovieDetails = async () => {
+      setLoading(true);
       try {
         const data = await fetchMovieDetails(id);
         setMovie(data);
@@ -80,14 +84,13 @@ const Movie = () => {
           setSimilarMovies(similarMovies);
         }
       } catch (error) {
-        console.error("Error loading movie details:", error);
+        console.error("Error al cargar los detalles de la película:", error);
       }
+      setLoading(false);
     };
 
     getMovieDetails();
   }, [id]);
-
-  console.log(movie);
 
   const handleAddToCart = () => {
     const isMovieInCart = cartItems.find((item) => item.id === movie.id);
@@ -105,7 +108,12 @@ const Movie = () => {
     }
   };
 
-  if (!movie) return <div>Cargando...</div>;
+  if (loading || !movie)
+    return (
+      <div className={global.overlay}>
+        <Spinner />
+      </div>
+    );
 
   return (
     <div className={styles.movieContainer}>

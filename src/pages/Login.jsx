@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { login } from "../Api/movieDb";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../redux/userSlice";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import styles from "../styles/login.module.css";
+import styles from "../styles/login-register.module.css";
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isDark = useSelector((state) => state.theme.isDark);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -51,8 +52,12 @@ const Login = () => {
       <div className={styles.loginWrapper}>
         <div className="col-4 mx-auto mb-3">
           <img
-            src="https://scholar.harvard.edu/sites/scholar.harvard.edu/files/styles/os_files_xxlarge/public/hackathon/files/hackplus.png?m=1596385410&itok=mYxdU-K8"
-            alt="HackPlus Logo"
+            src={
+              isDark
+                ? "../src/assets/logotipo-darkmode.svg"
+                : "../src/assets/logotipo-lightmode.svg"
+            }
+            alt="Hack Plus Logo"
             className={styles.logo}
           />
           <div className={`${styles.loginCard} card p-4 bg-secondary`}>

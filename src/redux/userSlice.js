@@ -23,7 +23,6 @@ const userSlice = createSlice({
     setPrice(state, action) {
       const { price } = action.payload;
       state.price = price.price;
-      console.log(state.price);
     },
   },
 });

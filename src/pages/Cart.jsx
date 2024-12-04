@@ -55,7 +55,7 @@ const Cart = () => {
   };
 
   return (
-    <div className={styles.cartContainer}>
+    <div className={global.container}>
       <h2 className={global["title"]}>Carrito de Compras</h2>
       {cartItems.length === 0 ? (
         <p className={styles.emptyMessage}>Tu carrito está vacío.</p>
