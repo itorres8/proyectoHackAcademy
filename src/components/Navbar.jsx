@@ -9,22 +9,26 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../redux/userSlice";
 import { searchMovies } from "../Api/tmdbAPI";
-import { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { toggleTheme } from "../redux/themeSlice";
+import styles from "../styles/Global.module.css";
 
 function NavScrollExample() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [bounce, setBounce] = useState(false);
   const cartItems = useSelector((state) => state.cart.cartItems);
   const userState = useSelector((state) => state.user);
   const isDark = useSelector((state) => state.theme.isDark);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const searchInputRef = useRef(null);
+  const dropdownRef = useRef(null);
 
   const userLogout = () => {
     dispatch(logout());
@@ -73,6 +77,38 @@ function NavScrollExample() {
       handleResultClick(searchResults[selectedIndex].id);
     }
   };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (
+        searchInputRef.current &&
+        !searchInputRef.current.contains(e.target) &&
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
+  const handleFocus = () => {
+    if (searchResults.length > 0) {
+      setIsDropdownOpen(true);
+    }
+  };
+
+  useEffect(() => {
+    if (cartItems.length > 0) {
+      setBounce(true);
+      const timeout = setTimeout(() => setBounce(false), 1000);
+      return () => clearTimeout(timeout);
+    }
+  }, [cartItems]);
 
   useEffect(() => {
     if (selectedIndex !== null && searchResults.length > 0) {
@@ -126,6 +162,8 @@ function NavScrollExample() {
               value={searchQuery}
               onChange={handleSearchChange}
               onKeyDown={handleKeyDown}
+              ref={searchInputRef}
+              onFocus={handleFocus}
             />
             <Button
               style={{ backgroundColor: "#F16E61", borderColor: "#F16E61" }}
@@ -137,6 +175,7 @@ function NavScrollExample() {
             {searchQuery && searchResults.length > 0 && isDropdownOpen && (
               <div
                 className="dropdown-menu show"
+                ref={dropdownRef}
                 style={{ position: "absolute", zIndex: 1000, top: 50 }}
               >
                 {searchResults.map((movie, index) => (
@@ -170,7 +209,7 @@ function NavScrollExample() {
             <NavDropdown
               title="Perfil"
               id="navbarScrollingDropdown"
-              style={{ marginRight: "-8px", marginLeft: "15px" }}
+              style={{ marginRight: "-5px", marginLeft: "5px" }}
             >
               <NavDropdown.Item onClick={() => navigate("/profile")}>
                 Mi Perfil
@@ -196,7 +235,11 @@ function NavScrollExample() {
           >
             <FaShoppingCart size={20} />
             {cartItems?.length > 0 && (
-              <span className="badge bg-secondary ms-2">
+              <span
+                className={`badge bg-secondary ms-2 ${
+                  bounce ? styles.bounce : ""
+                }`}
+              >
                 {cartItems?.length}
               </span>
             )}
