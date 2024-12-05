@@ -18,8 +18,6 @@ const Login = () => {
     password: "",
   });
 
-  const [errors, setErrors] = useState("");
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -41,7 +39,6 @@ const Login = () => {
       });
       navigate("/");
     } else {
-      setErrors(datosLogin.error);
       toast.error("Credenciales inválidas!", {
         position: "top-center",
         autoClose: 3000,
@@ -65,8 +62,7 @@ const Login = () => {
               Escribir correo para continuar
             </h2>
             <p className={styles.loginSubtitle}>
-              Es necesario iniciar sesión con tu cuenta de HackPlus. En caso de
-              no tener una recibirás indicaciones para crearla.
+              Es necesario iniciar sesión con tu cuenta de HackPlus.
             </p>
             <form onSubmit={handleSubmitLogin}>
               <div className="input-group mb-3">

@@ -7,7 +7,7 @@ import {
   fetchTopRatedMovies,
   fetchPopularMovies,
 } from "../Api/tmdbAPI";
-import { getUser, getPriceById } from "../Api/movieDb";
+import { getPriceById } from "../Api/movieDb";
 import { useSelector } from "react-redux";
 import styles from "../styles/Home.module.css";
 import { useDispatch } from "react-redux";
@@ -28,8 +28,6 @@ const Home = () => {
   const [popularMovies, setPopularMovies] = useState([]);
   const dispatch = useDispatch();
 
-  const user = useSelector((state) => state.user);
-
   useEffect(() => {
     const fetchMoviesAndGenres = async () => {
       try {
@@ -42,9 +40,9 @@ const Home = () => {
         dispatch(setPrice(getPriceByIdData));
 
         setMovies(movieData);
-        setRandomMovies(movieData.sort(() => 0.5 - Math.random()).slice(0, 5));
-        setTopRatedMovies(topRatedData.slice(0, 10));
-        setPopularMovies(popularData.slice(0, 10));
+        setRandomMovies(movieData.sort(() => 0.5 - Math.random()).slice(0, 8));
+        setTopRatedMovies(topRatedData.slice(0, 18));
+        setPopularMovies(popularData.slice(0, 18));
         setGenres(genreData);
       } catch (err) {
         setError(err.message);
@@ -115,7 +113,7 @@ const Home = () => {
 
       <div className="container-fluid px-0">
         <h4 className={`${styles.sectionTitle} px-3`}>
-          Peliculas mejor calificadas
+          Películas mejor calificadas
         </h4>
         <Carousel interval={3000} controls={true} indicators={false}>
           {renderMovieSlides(topRatedMovies)}
@@ -123,14 +121,14 @@ const Home = () => {
       </div>
 
       <div className="container-fluid px-0 mt-4">
-        <h4 className={`${styles.sectionTitle} px-3`}>Peliculas Populares</h4>
+        <h4 className={`${styles.sectionTitle} px-3`}>Películas Populares</h4>
         <Carousel interval={3000} controls={true} indicators={false}>
           {renderMovieSlides(popularMovies)}
         </Carousel>
       </div>
 
       <div className="my-3 px-3">
-        <h4 className={styles.sectionTitle}>Filtrar por Género</h4>
+        <h4 className={styles.sectionTitle}>Filtrar por género</h4>
         <Dropdown>
           <Dropdown.Toggle className={styles.genreDropdown} id="dropdown-basic">
             {selectedGenre

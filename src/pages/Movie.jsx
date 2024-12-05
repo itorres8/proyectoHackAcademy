@@ -11,8 +11,6 @@ import {
 import styles from "../styles/Movie.module.css";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { setPrice } from "../redux/userSlice";
-import { getPriceById } from "../Api/movieDb";
 import { useSelector } from "react-redux";
 import Spinner from "../components/Spinner";
 import global from "../styles/Global.module.css";
@@ -137,7 +135,7 @@ const Movie = () => {
             <strong>Fecha de lanzamiento:</strong> {movie.release_date}
           </p>
           <p>
-            <strong>Géneros:</strong>
+            <strong>Géneros: </strong>
             {movie.genres.map((genre) => genre.name).join(", ")}
           </p>
           <p>

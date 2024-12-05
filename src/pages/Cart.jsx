@@ -32,13 +32,11 @@ const Cart = () => {
         const movieAuxiliar = {
           movie_id: movie.id,
           title: movie.title,
-          qty: movie.quantity,
         };
         arrayMovies.push(movieAuxiliar);
       }
       await createOrder(arrayMovies, token);
       const userFetch = await getUser(userId, token);
-      const { orders } = userFetch;
       toast.success("Compra realizada con éxito!", {
         position: "top-center",
         autoClose: 3000,

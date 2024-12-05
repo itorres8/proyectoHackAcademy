@@ -17,8 +17,8 @@ const About = () => {
         />
       </div>
       <p className={styles["about-text"]}>
-        ¡Bienvenidos a <strong>Hack Plus</strong>, tu tienda digital de
-        películas donde el cine no tiene límites!
+        ¡Bienvenido a <strong>Hack Plus</strong>, tu tienda digital de películas
+        donde el cine no tiene límites!
       </p>
       <p className={styles["about-text"]}>
         ¿Sos un amante del cine? ¿Buscás la película perfecta para tu próxima
