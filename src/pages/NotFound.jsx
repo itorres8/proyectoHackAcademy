@@ -18,11 +18,7 @@ const NotFound = () => {
     >
       <div>
         <img
-          src={
-            isDark
-              ? "../public/logotipo-darkmode.svg"
-              : "../public/logotipo-lightmode.svg"
-          }
+          src={isDark ? "/logotipo-darkmode.svg" : "/logotipo-lightmode.svg"}
           alt="Hack Plus Logo"
         />
       </div>

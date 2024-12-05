@@ -137,11 +137,7 @@ function NavScrollExample() {
           style={{ marginRight: "5px" }}
         >
           <img
-            src={
-              isDark
-                ? "../public/logotipo-darkmode.svg"
-                : "../public/logotipo-lightmode.svg"
-            }
+            src={isDark ? "/logotipo-darkmode.svg" : "/logotipo-lightmode.svg"}
             alt="logo"
             width="auto"
             height="30"

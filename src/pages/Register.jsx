@@ -50,11 +50,7 @@ const Register = () => {
       <div className={styles.loginWrapper}>
         <div className="col-4 mx-auto mb-3">
           <img
-            src={
-              isDark
-                ? "../public/logotipo-darkmode.svg"
-                : "../public/logotipo-lightmode.svg"
-            }
+            src={isDark ? "/logotipo-darkmode.svg" : "/logotipo-lightmode.svg"}
             alt="Hack Plus Logo"
             className={styles.logo}
           />

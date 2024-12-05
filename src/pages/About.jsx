@@ -12,11 +12,7 @@ const About = () => {
       <h1 className={global["title"]}>Acerca de Nosotros</h1>
       <div className={styles["about-image"]}>
         <img
-          src={
-            isDark
-              ? "../public/logotipo-darkmode.svg"
-              : "../public/logotipo-lightmode.svg"
-          }
+          src={isDark ? "/logotipo-darkmode.svg" : "/logotipo-lightmode.svg"}
           alt="Hack Plus Logo"
         />
       </div>
