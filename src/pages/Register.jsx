@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { register } from "../Api/movieDb";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../redux/userSlice";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import styles from "../styles/login-register.module.css";
+import styles from "../styles/Login-register.module.css";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -17,10 +16,7 @@ const Register = () => {
     password: "",
   });
 
-  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
   const isDark = useSelector((state) => state.theme.isDark);
   const handleChange = (e) => {
     const { name, value } = e.target;
