@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import global from "../styles/Global.module.css";
 import Spinner from "../components/Spinner";
-import formulario from "../styles/Login-Register.module.css";
+import formulario from "../styles/Login-register.module.css";
 import { format, parseISO } from "date-fns";
 import { FloatingLabel, Form, Modal, Button } from "react-bootstrap";
 
