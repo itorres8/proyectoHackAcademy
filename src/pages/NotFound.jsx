@@ -1,6 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/NotFound.module.css";
+import styles from "../styles/NotFound.module.css";
+import global from "../styles/Global.module.css";
+import { useSelector } from "react-redux";
+useSelector;
 
 const NotFound = () => {
   const navigate = useNavigate();
@@ -8,13 +11,29 @@ const NotFound = () => {
   const handleGoHome = () => {
     navigate("/");
   };
-
+  const isDark = useSelector((state) => state.theme.isDark);
   return (
-    <div className="not-found-container">
-      <h2 className="title">Oops!.. La página que buscas no existe</h2>
-      <button className="go-home-button" onClick={handleGoHome}>
-        Volver a Inicio
-      </button>
+    <div
+      className={`${global.container} d-flex flex-column justify-content-evenly align-items-center`}
+    >
+      <div>
+        <img
+          src={
+            isDark
+              ? "../src/assets/logotipo-darkmode.svg"
+              : "../src/assets/logotipo-lightmode.svg"
+          }
+          alt="Hack Plus Logo"
+        />
+      </div>
+      <h2 className={`${global.title} mb-5`}>
+        Oops!.. La página que buscas no existe
+      </h2>
+      <div className="text-center">
+        <button className={`${styles.goHome}`} onClick={handleGoHome}>
+          Volver a Inicio
+        </button>
+      </div>
     </div>
   );
 };

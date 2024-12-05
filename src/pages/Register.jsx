@@ -32,7 +32,6 @@ const Register = () => {
 
   const handleSubmitRegister = async (e) => {
     e.preventDefault();
-    console.log(e);
 
     try {
       const registro = await register(formData);

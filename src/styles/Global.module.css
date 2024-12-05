@@ -51,7 +51,14 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at 20% 50%, #ff6f611a 0%, transparent 50%);
+  background: radial-gradient(
+    circle at 20% 50%,
+    #ff6f611a 0%,
+    #ff6f610d 20%,
+    #ff6f6105 40%,
+    transparent 60%
+  );
+
   pointer-events: none;
   z-index: 1;
 }
