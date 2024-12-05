@@ -1,29 +1,10 @@
-.container {
-  background-color: var(--background-color);
-  color: var(--text-color);
-  min-height: 100vh;
-  padding: 2rem;
-  font-family: "Inter", sans-serif;
-}
-
 .card {
-  background-color: #393a3a;
-  border: 1px solid #fdfeff !important;
   margin-bottom: 1.5rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
 }
 
-.card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3) !important;
-}
-
-.card-title {
-  color: #faf8f8;
-  font-weight: 600;
-  border-bottom: 2px solid #f7f7f7;
-  padding-bottom: 0.5rem;
-  margin-bottom: 1rem;
+.textGradiant {
+  background: linear-gradient(to right, rgba(255, 110, 97, 0.253), transparent);
 }
 
 .display-4 {
@@ -40,14 +21,16 @@
   color: #7b7b7b !important;
 }
 
-.form-label {
-  color: #e0e0e0;
-  margin-bottom: 0.5rem;
+.buttonEditar {
+  background-color: #ff6f61;
+  border: 1px solid #ff6f61;
+  border-radius: 7px;
+  color: #fff;
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.form-control {
-  background-color: #0f3460;
-  border: 1px solid #253b70;
-  color: #e0e0e0;
-  transition: all 0.3s ease;
+.buttonEditar:hover {
+  transform: scale(1.02);
 }

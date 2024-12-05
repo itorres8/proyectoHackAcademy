@@ -42,6 +42,10 @@ const Login = () => {
       navigate("/");
     } else {
       setErrors(datosLogin.error);
+      toast.error("Credenciales inválidas!", {
+        position: "top-center",
+        autoClose: 3000,
+      });
     }
   };
 
@@ -98,9 +102,6 @@ const Login = () => {
                   onChange={handleChange}
                   required
                 />
-              </div>
-              <div>
-                {errors && <p className={styles.errorMessage}>{errors}</p>}
               </div>
               <div>
                 <button
